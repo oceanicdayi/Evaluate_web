@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import os
 import re
@@ -206,7 +207,7 @@ def expand_sparse_html(base_url: str, html: str, timeout: int = 20, min_chars: i
     if _plain_text_len(merged) >= min_chars:
         return merged
 
-    # 2) inline script 中的可見文字（模板字串／中文內容）
+    # 2) inline script 中的可見文字（字串常值與 JSX 文字節點）
     text_bits: list[str] = []
     for s in BeautifulSoup(merged, "html.parser").find_all("script"):
         if s.get("src"):
@@ -214,12 +215,16 @@ def expand_sparse_html(base_url: str, html: str, timeout: int = 20, min_chars: i
         raw = s.string or s.get_text() or ""
         if len(raw) < 80:
             continue
-        # 抽出較長中文片段與引號字串
-        for frag in re.findall(r"[\u4e00-\u9fff][^\"'\\]{8,200}", raw):
-            text_bits.append(frag.strip())
-        for frag in re.findall(r'["\']([^"\']{20,400})["\']', raw):
+        # JavaScript / JSX 中的引號或 template-literal 文字。
+        for frag in re.findall(r"""["'`]([^"'`]{4,1000})["'`]""", raw, flags=re.S):
             if re.search(r"[\u4e00-\u9fff]", frag):
-                text_bits.append(frag.strip())
+                cleaned = re.sub(r"\s+", " ", frag).strip()
+                text_bits.append(cleaned)
+        # React JSX 中直接寫在標籤間的可見文字。
+        for frag in re.findall(r">([^<>{}\n]{2,500})<", raw):
+            if re.search(r"[\u4e00-\u9fff]", frag):
+                cleaned = re.sub(r"\s+", " ", frag).strip()
+                text_bits.append(cleaned)
     if text_bits:
         # 去重保序
         uniq: list[str] = []
@@ -231,7 +236,13 @@ def expand_sparse_html(base_url: str, html: str, timeout: int = 20, min_chars: i
             uniq.append(t)
         extr = "\n".join(uniq[:200])
         print(f"[info] 自 script 抽出 {len(extr)} 字元補充文本", file=sys.stderr)
-        merged += f"\n<!-- extracted-script-text -->\n<div id='extracted-script-text'>{extr}</div>\n"
+        # Escape extracted JSX so BeautifulSoup does not interpret it as markup
+        # and silently discard the text between pseudo-tags.
+        escaped = html_lib.escape(extr)
+        merged += (
+            "\n<!-- extracted-script-text -->\n"
+            f"<div id='extracted-script-text'>{escaped}</div>\n"
+        )
     return merged
 
 
