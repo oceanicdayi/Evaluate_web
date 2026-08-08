@@ -156,6 +156,100 @@ def decode_response_text(resp: requests.Response) -> str:
     return text
 
 
+def _plain_text_len(html_content: str) -> int:
+    soup = BeautifulSoup(html_content, "html.parser")
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+    return len(re.sub(r"\s+", " ", soup.get_text(" ", strip=True)).strip())
+
+
+def expand_sparse_html(base_url: str, html: str, timeout: int = 20, min_chars: int = 400) -> str:
+    """
+    若首頁純文字過短，嘗試：
+    1) 併入同網域內部 .html 子頁
+    2) 從大型 inline <script> 抽出中文／長字串（SPA／資料內嵌頁）
+    """
+    if _plain_text_len(html) >= min_chars:
+        return html
+
+    soup = BeautifulSoup(html, "html.parser")
+    chunks = [html]
+    base_netloc = urlparse(base_url).netloc
+    seen = {urlparse(base_url)._replace(fragment="").geturl()}
+
+    # 1) 同站 HTML 子頁
+    for a in soup.find_all("a", href=True):
+        absu = urljoin(base_url, a["href"])
+        p = urlparse(absu)
+        if p.netloc != base_netloc:
+            continue
+        clean = p._replace(fragment="", query="").geturl()
+        if clean in seen:
+            continue
+        path = p.path.lower()
+        if not (path.endswith(".html") or path.endswith(".htm") or path.endswith("/")):
+            continue
+        if any(x in path for x in ["login", "signin"]):
+            continue
+        seen.add(clean)
+        if len(seen) > 8:  # 避免爬太多
+            break
+        try:
+            resp = requests.get(clean, timeout=timeout, headers={"User-Agent": USER_AGENT})
+            if resp.ok and "text/html" in resp.headers.get("Content-Type", "text/html"):
+                chunks.append(decode_response_text(resp))
+                print(f"[info] 併入子頁: {clean}", file=sys.stderr)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[warn] 子頁失敗 {clean}: {exc}", file=sys.stderr)
+
+    merged = "\n".join(chunks)
+    if _plain_text_len(merged) >= min_chars:
+        return merged
+
+    # 2) inline script 中的可見文字（模板字串／中文內容）
+    text_bits: list[str] = []
+    for s in BeautifulSoup(merged, "html.parser").find_all("script"):
+        if s.get("src"):
+            continue
+        raw = s.string or s.get_text() or ""
+        if len(raw) < 80:
+            continue
+        # 抽出較長中文片段與引號字串
+        for frag in re.findall(r"[\u4e00-\u9fff][^\"'\\]{8,200}", raw):
+            text_bits.append(frag.strip())
+        for frag in re.findall(r'["\']([^"\']{20,400})["\']', raw):
+            if re.search(r"[\u4e00-\u9fff]", frag):
+                text_bits.append(frag.strip())
+    if text_bits:
+        # 去重保序
+        uniq: list[str] = []
+        seen_t: set[str] = set()
+        for t in text_bits:
+            if t in seen_t:
+                continue
+            seen_t.add(t)
+            uniq.append(t)
+        extr = "\n".join(uniq[:200])
+        print(f"[info] 自 script 抽出 {len(extr)} 字元補充文本", file=sys.stderr)
+        merged += f"\n<!-- extracted-script-text -->\n<div id='extracted-script-text'>{extr}</div>\n"
+    return merged
+
+
+def detect_fetch_limitation(source: str, html: str) -> str:
+    """標記無法完整抓取內容的情況，供結果解讀。"""
+    low = html.lower()
+    text_len = _plain_text_len(html)
+    if "gemini.google.com" in source and ("sign in" in low or text_len < 120):
+        return "gemini_login_wall"
+    if "streamlit.app" in source and text_len < 80:
+        return "streamlit_js_shell"
+    if ("vite.svg" in low or "/assets/index-" in low or "react" in low) and text_len < 120:
+        return "spa_js_bundle"
+    if text_len < 120:
+        return "sparse_html"
+    return ""
+
+
 def load_html(source: str, timeout: int = 30) -> str:
     """從 URL 或本機檔案讀取 HTML。"""
     parsed = urlparse(source)
@@ -169,7 +263,8 @@ def load_html(source: str, timeout: int = 30) -> str:
             headers={"User-Agent": USER_AGENT},
         )
         resp.raise_for_status()
-        return decode_response_text(resp)
+        html = decode_response_text(resp)
+        return expand_sparse_html(fetch_url, html, timeout=min(timeout, 20))
     path = Path(source)
     if not path.exists():
         raise FileNotFoundError(f"找不到檔案: {source}")
@@ -572,6 +667,7 @@ def analyze_record(
             "來源": source,
             "附件數": attachment_count,
             "狀態": error or "empty_html",
+            "抓取限制": error or "empty_html",
             "媒體豐富度(1-4)": None,
             "排版架構(1-4)": None,
             "總字數": 0,
@@ -591,6 +687,7 @@ def analyze_record(
     media, layout, details = analyze_web_complexity(html_content)
     word_count, density, term_count, pure_text, term_hits = analyze_text_density(html_content)
     critical_ratio, method = analyze_reflection_level(pure_text, model=model)
+    limitation = detect_fetch_limitation(source, html_content)
 
     return {
         "學號": student_id,
@@ -599,7 +696,8 @@ def analyze_record(
         "平台": platform,
         "來源": source,
         "附件數": attachment_count,
-        "狀態": "ok",
+        "狀態": "limited" if limitation else "ok",
+        "抓取限制": limitation,
         "媒體豐富度(1-4)": media,
         "排版架構(1-4)": layout,
         "總字數": word_count,
@@ -674,28 +772,43 @@ def print_report(df: pd.DataFrame) -> None:
     except Exception:  # noqa: BLE001
         print(show.to_string(index=False))
 
-    ok = df[df["狀態"] == "ok"] if "狀態" in df.columns else df
-    if not ok.empty and "媒體豐富度(1-4)" in ok.columns:
+    scored = df[df["媒體豐富度(1-4)"].notna()] if "媒體豐富度(1-4)" in df.columns else df
+    reliable = scored
+    if "抓取限制" in df.columns:
+        blocked = {
+            "gemini_login_wall",
+            "streamlit_js_shell",
+            "spa_js_bundle",
+            "empty_html",
+            "no_web_link",
+        }
+        reliable = scored[~scored["抓取限制"].isin(blocked)]
+    if not scored.empty:
         print()
-        print("=== 班級摘要（僅成功抓取的網頁作品）===")
-        print(f"作品數: {len(ok)}")
-        print(
-            "平均｜媒體={:.2f} 排版={:.2f} 字數={:.0f} 密度={:.2f} 批判%={:.1f}".format(
-                ok["媒體豐富度(1-4)"].mean(),
-                ok["排版架構(1-4)"].mean(),
-                ok["總字數"].mean(),
-                ok["專有名詞密度(次/千字)"].mean(),
-                ok["批判思考佔比(%)"].mean(),
+        print("=== 班級摘要 ===")
+        print(f"抓取作品數: {len(scored)}；內容較完整可比較: {len(reliable)}")
+        if not reliable.empty:
+            print(
+                "平均（較完整）｜媒體={:.2f} 排版={:.2f} 字數={:.0f} 密度={:.2f} 批判%={:.1f}".format(
+                    reliable["媒體豐富度(1-4)"].mean(),
+                    reliable["排版架構(1-4)"].mean(),
+                    reliable["總字數"].mean(),
+                    reliable["專有名詞密度(次/千字)"].mean(),
+                    reliable["批判思考佔比(%)"].mean(),
+                )
             )
-        )
-        print(
-            "媒體分數分布:",
-            ok["媒體豐富度(1-4)"].value_counts().sort_index().to_dict(),
-        )
-        print(
-            "排版分數分布:",
-            ok["排版架構(1-4)"].value_counts().sort_index().to_dict(),
-        )
+            print(
+                "媒體分數分布:",
+                reliable["媒體豐富度(1-4)"].value_counts().sort_index().to_dict(),
+            )
+            print(
+                "排版分數分布:",
+                reliable["排版架構(1-4)"].value_counts().sort_index().to_dict(),
+            )
+        if "抓取限制" in df.columns:
+            lim = scored[scored["抓取限制"].astype(str).str.len() > 0]["抓取限制"].value_counts()
+            if not lim.empty:
+                print("抓取限制:", lim.to_dict())
 
     print()
     for _, row in df.iterrows():
@@ -705,10 +818,12 @@ def print_report(df: pd.DataFrame) -> None:
             print(f"平台: {row['平台']}")
         if row.get("來源"):
             print(f"來源: {row['來源']}")
-        if row.get("狀態") and row["狀態"] != "ok":
+        if row.get("狀態") and row["狀態"] not in {"ok", "limited"}:
             print(f"狀態: {row['狀態']}")
             print()
             continue
+        if row.get("抓取限制"):
+            print(f"抓取限制: {row['抓取限制']}")
         print(score_labels(int(row["媒體豐富度(1-4)"]), int(row["排版架構(1-4)"])))
         print(
             f"字數={row['總字數']} | 專有名詞={row.get('專有名詞出現次數', '?')} 次"
