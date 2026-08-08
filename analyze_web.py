@@ -56,11 +56,14 @@ EARTH_SCIENCE_DICT = [
     "refraction", "reflection", "epicenter", "hypocenter",
 ]
 
+# 注意：關鍵詞比對不做斷詞，只做子字串比對，因此偏向常見於「反思語句」的
+# 詞彙，避免收錄容易出現在標題／品牌命名中的泛用詞（例如「整合」常見於
+# 「整合式學習平台」這類作品標題，與批判思考無關，曾造成明顯高估，已移除）。
 REFLECTION_MARKERS = [
     "反思", "反省", "發現", "或許", "是否", "比較", "差異", "優缺點",
     "優點", "缺點", "洞見", "疑問", "質疑", "挑戰", "侷限", "限制",
     "改進", "建議", "我認為", "我覺得", "讓我", "啟發", "批判",
-    "為什麼", "如何才能", "反而", "不僅", "更深化", "整合",
+    "為什麼", "如何才能", "反而", "不僅", "更深化",
     "reflect", "however", "limitation", "insight", "challenge",
     "compared", "whereas", "critique",
 ]
@@ -507,6 +510,45 @@ def parse_final_report_index(index_url: str, timeout: int = 30) -> list[dict[str
     return records
 
 
+# 常見第三方分析／字型／嵌入元件網域。這些程式庫幾乎必然包含 fetch/XHR 呼叫，
+# 但反映的是樣板化的追蹤或字型載入，不是學生自建的動態資料整合，計算「排版architecture」
+# 與「進階腳本」時應予排除，避免每個掛了 Google Analytics 的靜態頁都被誤判為 4 分。
+THIRD_PARTY_SCRIPT_HOSTS = (
+    "google-analytics.com", "googletagmanager.com", "gstatic.com",
+    "doubleclick.net", "connect.facebook.net", "hotjar.com", "clarity.ms",
+    "disqus.com", "cloudflareinsights.com", "vercel-insights.com",
+    "plausible.io", "umami.is", "fonts.googleapis.com", "fonts.gstatic.com",
+)
+
+# 具名圖表／視覺化函式庫。要求以獨立字詞（word boundary）比對，避免誤判：
+# Vite/webpack 等打包工具常見的雜湊檔名（如 index-D3f8a1b2.js）或 CDN 子網域
+# （如 d3xyz123.cloudfront.net）恰好包含連續字母 "d3"，若只做子字串比對會被
+# 誤認為使用了 D3.js，屬於系統性高估媒體豐富度的風險。
+ADVANCED_VIZ_PATTERN = re.compile(
+    r"\b(antigravity|three\.js|d3(?:\.min)?\.js|chart\.?js|plotly(?:\.min)?\.js|leaflet(?:\.min)?\.js)\b",
+    re.I,
+)
+
+# 真正代表「多媒體／互動」的標籤：canvas、video、audio、iframe 幾乎必然承載
+# 實際內容或互動行為。裸 <svg> 常只是圖示庫（icon library，如 Heroicons／
+# Lucide）產生的裝飾性小圖示，不應與此同級看待，否則任何使用現成元件庫的
+# AI 產生頁面都會被系統性地評為「進階整合」，讓尺規失去鑑別力。
+RICH_MEDIA_TAGS = ["canvas", "video", "audio", "iframe"]
+SVG_CHART_CHILD_TAGS = ["path", "circle", "rect", "line", "polygon", "polyline"]
+SVG_CHART_MIN_CHILDREN = 8  # 經驗閾值：裝飾性圖示通常只有 1–4 個繪圖子節點
+
+
+def _filter_third_party(blob_parts: list[tuple[str, str]]) -> str:
+    """只保留同站或無法辨識來源的 script／connect 內容，濾除已知第三方服務。"""
+    kept = []
+    for src, text in blob_parts:
+        if src and any(host in src.lower() for host in THIRD_PARTY_SCRIPT_HOSTS):
+            continue
+        kept.append(src)
+        kept.append(text)
+    return " ".join(kept)
+
+
 def analyze_web_complexity(html_content: str) -> tuple[int, int, dict[str, Any]]:
     """
     分析網頁複雜度，回傳「媒體豐富度」與「排版架構」分數 (1-4分)。
@@ -515,34 +557,41 @@ def analyze_web_complexity(html_content: str) -> tuple[int, int, dict[str, Any]]
 
     # --- 評估 A: 媒體豐富度 (Media Richness) ---
     images = soup.find_all("img")
-    interactive = soup.find_all(["canvas", "svg", "audio", "video", "iframe"])
-    # script 文字與 src 都納入掃描（外部 chart.js 等常見於 src）
-    scripts = soup.find_all("script")
-    script_blob = " ".join(
-        ((s.get("src") or "") + " " + (s.string or s.get_text() or "")) for s in scripts
-    )
-    has_advanced_scripts = bool(
-        re.search(r"antigravity|three\.js|d3(\.js)?|chart\.?js|plotly|leaflet", script_blob, re.I)
-    )
-    # CSS/連結層面的進階視覺資源
-    link_blob = " ".join((a.get("href") or "") for a in soup.find_all("link"))
-    has_advanced_assets = bool(
-        re.search(r"three|d3|chart|plotly|leaflet|antigravity", link_blob, re.I)
-    )
+    all_svgs = soup.find_all("svg")
+    rich_svgs = [
+        s for s in all_svgs
+        if len(s.find_all(SVG_CHART_CHILD_TAGS)) >= SVG_CHART_MIN_CHILDREN
+    ]
+    decorative_svg_count = len(all_svgs) - len(rich_svgs)
+    rich_interactive = soup.find_all(RICH_MEDIA_TAGS)
 
+    scripts = soup.find_all("script")
+    script_parts = [
+        ((s.get("src") or ""), (s.string or s.get_text() or "")) for s in scripts
+    ]
+    own_script_blob = _filter_third_party(script_parts)
+    has_advanced_scripts = bool(ADVANCED_VIZ_PATTERN.search(own_script_blob))
+    # CSS/連結層面的進階視覺資源
+    link_parts = [((a.get("href") or ""), "") for a in soup.find_all("link")]
+    own_link_blob = _filter_third_party(link_parts)
+    has_advanced_assets = bool(ADVANCED_VIZ_PATTERN.search(own_link_blob))
+
+    rich_media_count = len(rich_interactive) + len(rich_svgs)
     media_score = 1
-    if has_advanced_scripts or has_advanced_assets or len(interactive) > 1:
-        media_score = 4
-    elif interactive:
-        media_score = 3
-    elif images:
+    if images or all_svgs:
         media_score = 2
+    if rich_interactive or rich_svgs:
+        media_score = 3
+    if has_advanced_scripts or has_advanced_assets or rich_media_count > 1:
+        media_score = 4
 
     # --- 評估 B: 排版與架構 (Layout Structure) ---
     structure = soup.find_all(["h1", "h2", "div", "section", "article", "main"])
     nav_like = soup.find_all(["nav", "header", "footer"])
+    # 僅比對同站／未知來源程式碼，避免第三方分析或字型載入器的內建
+    # fetch/XHR 呼叫，被誤判為學生自建的動態資料整合。
     has_api_or_dynamic = bool(
-        re.search(r"\bfetch\s*\(|axios|XMLHttpRequest|\.getJSON\(|/api/|graphql", script_blob, re.I)
+        re.search(r"\bfetch\s*\(|axios|XMLHttpRequest|\.getJSON\(|/api/|graphql", own_script_blob, re.I)
     )
     # 多頁跡象：內部錨點導覽或明確分頁連結
     anchors = soup.find_all("a", href=True)
@@ -564,8 +613,10 @@ def analyze_web_complexity(html_content: str) -> tuple[int, int, dict[str, Any]]
 
     details = {
         "img_count": len(images),
-        "interactive_count": len(interactive),
-        "interactive_tags": sorted({t.name for t in interactive}),
+        "svg_count": len(all_svgs),
+        "svg_chart_count": len(rich_svgs),
+        "interactive_count": len(rich_interactive) + len(all_svgs),
+        "interactive_tags": sorted({t.name for t in rich_interactive} | ({"svg"} if all_svgs else set())),
         "structure_count": len(structure),
         "nav_header_footer": len(nav_like),
         "script_count": len(scripts),
@@ -612,17 +663,17 @@ def analyze_reflection_level_heuristic(text: str) -> float:
     if not sentences:
         return 0.0
 
-    critical = 0
-    descriptive = 0
-    for sent in sentences:
-        c_hits = sum(1 for m in REFLECTION_MARKERS if m.lower() in sent.lower())
-        d_hits = sum(1 for m in DESCRIBE_MARKERS if m.lower() in sent.lower())
-        if c_hits > d_hits and c_hits > 0:
-            critical += 1
-        elif d_hits > 0 or c_hits == 0:
-            descriptive += 1
-        else:
-            critical += 1
+    # 逐句比對關鍵詞：批判詞命中數嚴格多於描述詞命中數、且至少命中一個
+    # 批判詞，才記為批判思考句；其餘（含兩者皆未命中的中性句）一律計為
+    # 描述性。這代表多數不含任一關鍵詞的過渡句、標題、清單項目會被歸入
+    # 描述性，比例因此對關鍵詞覆蓋率敏感，只適合看趨勢，不是精確心理量測。
+    critical = sum(
+        1
+        for sent in sentences
+        if (c := sum(1 for m in REFLECTION_MARKERS if m.lower() in sent.lower()))
+        > sum(1 for m in DESCRIBE_MARKERS if m.lower() in sent.lower())
+        and c > 0
+    )
 
     ratio = 100.0 * critical / max(len(sentences), 1)
     return round(min(100.0, max(0.0, ratio)), 1)

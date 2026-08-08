@@ -21,17 +21,19 @@ DEFAULT_SEIS_URL = "下學期原始作品集合（連結因去識別化移除）
 
 
 def load_and_match(geophysics_csv: str, seismology_csv: str) -> pd.DataFrame:
-    geo = pd.read_csv(geophysics_csv, dtype={"學號": str})
-    seis = pd.read_csv(seismology_csv, dtype={"學號": str})
+    geo = pd.read_csv(geophysics_csv, dtype={"匿名代碼": str})
+    seis = pd.read_csv(seismology_csv, dtype={"匿名代碼": str})
 
-    # Exact ID + name matching prevents accidental joins on duplicate names.
+    # Published data is de-identified down to a single one-time anonymous
+    # code (no 學號／姓名 columns remain), so matching keys on that code.
     matched = geo.merge(
         seis,
-        on=["學號", "姓名"],
+        on="匿名代碼",
         how="inner",
         suffixes=("_上學期", "_下學期"),
         validate="one_to_one",
     )
+    matched["匿名標籤"] = "匿名學生 " + matched["匿名代碼"]
 
     for metric, short in METRICS.items():
         matched[f"{short}_變化"] = (
@@ -51,7 +53,7 @@ def load_and_match(geophysics_csv: str, seismology_csv: str) -> pd.DataFrame:
         matched["比較信度"].eq("低（上學期頁面過短）"), "限制原因"
     ] = "upper_static_text_below_400"
 
-    return matched.sort_values(["學號", "姓名"]).reset_index(drop=True)
+    return matched.sort_values(["匿名代碼"]).reset_index(drop=True)
 
 
 def fmt_num(value: float, digits: int = 1) -> str:
@@ -82,13 +84,13 @@ def make_markdown(matched: pd.DataFrame, geo_url: str, seis_url: str) -> str:
         "",
         f"- 上學期（地球物理通論）：{geo_url}",
         f"- 下學期（地震學）：{seis_url}",
-        f"- 同名且同學號：**{len(matched)} 人**",
+        f"- 完成跨學期配對：**{len(matched)} 人**",
         f"- 可作班級統計的高信度配對：**{len(high)} 人**",
         f"- 受登入牆、SPA/Streamlit 或過短靜態頁限制：**{len(limited)} 人**",
         "",
         "## 方法與解讀限制",
         "",
-        "以「學號＋姓名」精確配對，避免同名誤配。兩學期使用同一套 HTML 尺規與術語字典。",
+        "研究端以私有鍵精確配對；發布資料只保留一次性匿名代碼。兩學期使用同一套 HTML 尺規與術語字典。",
         "班級平均只納入兩份作品均可讀，且上學期靜態文本至少 400 字的配對。",
         "媒體與排版為 1–4 級序位尺規；術語密度會受篇幅分母影響；批判思考比例是關鍵詞啟發式估計，",
         "因此適合描述趨勢，不宜視為學科成績或精確心理量測。",
@@ -135,7 +137,7 @@ def make_markdown(matched: pd.DataFrame, geo_url: str, seis_url: str) -> str:
         "",
         "## 每位配對學生",
         "",
-        "| 學號 | 姓名 | 信度 | 媒體 上→下 (Δ) | 排版 上→下 (Δ) | 字數 上→下 (Δ) | "
+        "| 匿名代碼 | 匿名標籤 | 信度 | 媒體 上→下 (Δ) | 排版 上→下 (Δ) | 字數 上→下 (Δ) | "
         "術語密度 上→下 (Δ) | 批判思考% 上→下 (Δ) |",
         "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |",
     ]
@@ -151,7 +153,7 @@ def make_markdown(matched: pd.DataFrame, geo_url: str, seis_url: str) -> str:
             )
 
         lines.append(
-            f"| {row['學號']} | {row['姓名']} | {row['比較信度']} | "
+            f"| {row['匿名代碼']} | {row['匿名標籤']} | {row['比較信度']} | "
             f"{pair('媒體豐富度(1-4)', '媒體', 0)} | "
             f"{pair('排版架構(1-4)', '排版', 0)} | "
             f"{pair('總字數', '字數', 0)} | "
@@ -160,13 +162,13 @@ def make_markdown(matched: pd.DataFrame, geo_url: str, seis_url: str) -> str:
         )
 
     if not high.empty:
-        top_words = high.nlargest(3, "字數_變化")[["姓名", "字數_變化"]]
-        top_media = high.nlargest(3, "媒體_變化")[["姓名", "媒體_變化"]]
-        top_reflect = high.nlargest(3, "批判思考_變化")[["姓名", "批判思考_變化"]]
+        top_words = high.nlargest(3, "字數_變化")[["匿名標籤", "字數_變化"]]
+        top_media = high.nlargest(3, "媒體_變化")[["匿名標籤", "媒體_變化"]]
+        top_reflect = high.nlargest(3, "批判思考_變化")[["匿名標籤", "批判思考_變化"]]
 
         def rank_text(frame: pd.DataFrame, col: str, suffix: str) -> str:
             return "、".join(
-                f"{row['姓名']}（{fmt_delta(row[col], 1)}{suffix}）"
+                f"{row['匿名標籤']}（{fmt_delta(row[col], 1)}{suffix}）"
                 for _, row in frame.iterrows()
             )
 
@@ -184,12 +186,12 @@ def make_markdown(matched: pd.DataFrame, geo_url: str, seis_url: str) -> str:
             "",
             "## 未納入班級平均的配對",
             "",
-            "| 學號 | 姓名 | 原因 |",
+            "| 匿名代碼 | 匿名標籤 | 原因 |",
             "| --- | --- | --- |",
         ]
         for _, row in limited.iterrows():
             lines.append(
-                f"| {row['學號']} | {row['姓名']} | "
+                f"| {row['匿名代碼']} | {row['匿名標籤']} | "
                 f"{row['限制原因'] or row['比較信度']} |"
             )
 
@@ -242,7 +244,7 @@ def main() -> int:
     report = make_markdown(matched, DEFAULT_GEO_URL, DEFAULT_SEIS_URL)
     Path(args.report).write_text(report, encoding="utf-8")
 
-    print(f"同名且同學號: {len(matched)} 人")
+    print(f"完成跨學期配對: {len(matched)} 人")
     print(f"高信度配對: {len(high)} 人")
     print(f"受限配對: {len(matched) - len(high)} 人")
     print(f"[saved] {args.output}")

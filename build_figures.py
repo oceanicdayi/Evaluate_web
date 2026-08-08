@@ -95,7 +95,7 @@ def figure1(data: pd.DataFrame) -> str:
                 f'<text x="{cx:.1f}" y="{plot_bottom + 31}" text-anchor="middle" fill="{INK}" font-family="{FONT}" font-size="16">{score} 分</text>'
             )
         note = (
-            "下學期 6/8 達到 4 分"
+            f"下學期 {int(lower_counts[4])}/8 達到 4 分"
             if metric == "媒體豐富度(1-4)"
             else "兩學期皆以 3 分為主"
         )

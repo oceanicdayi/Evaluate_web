@@ -24,13 +24,13 @@ SEIS_URL = "下學期原始作品集合（連結因去識別化移除）"
 
 
 def assign_groups(geo_csv: str, seis_csv: str) -> pd.DataFrame:
-    geo = pd.read_csv(geo_csv, dtype={"學號": str})
-    seis = pd.read_csv(seis_csv, dtype={"學號": str})
-    prior_ids = set(geo["學號"].dropna())
-    seis["組別"] = seis["學號"].map(
+    geo = pd.read_csv(geo_csv, dtype={"匿名代碼": str})
+    seis = pd.read_csv(seis_csv, dtype={"匿名代碼": str})
+    prior_ids = set(geo["匿名代碼"].dropna())
+    seis["組別"] = seis["匿名代碼"].map(
         lambda sid: PRIOR_GROUP if sid in prior_ids else NEW_GROUP
     )
-    return seis.sort_values(["組別", "學號"]).reset_index(drop=True)
+    return seis.sort_values(["組別", "匿名代碼"]).reset_index(drop=True)
 
 
 def cliffs_delta(a: pd.Series, b: pd.Series) -> float:
@@ -117,8 +117,8 @@ def make_report(grouped: pd.DataFrame, summary: pd.DataFrame) -> str:
         "",
         "## 組別成員",
         "",
-        f"- {PRIOR_GROUP}：" + "、".join(prior["姓名"]),
-        f"- {NEW_GROUP}：" + "、".join(new["姓名"]),
+        f"- {PRIOR_GROUP}：" + "、".join("匿名學生 " + prior["匿名代碼"]),
+        f"- {NEW_GROUP}：" + "、".join("匿名學生 " + new["匿名代碼"]),
         "",
         "## 描述統計",
         "",
@@ -142,20 +142,28 @@ def make_report(grouped: pd.DataFrame, summary: pd.DataFrame) -> str:
     word_new = new["總字數"]
     reflect_prior = prior["批判思考佔比(%)"]
     reflect_new = new["批判思考佔比(%)"]
+    media_row = summary.set_index("指標").loc["媒體豐富度"]
+    layout_row = summary.set_index("指標").loc["排版架構"]
+    term_row = summary.set_index("指標").loc["術語密度"]
 
     lines += [
         "",
         "## 解讀",
         "",
-        "1. **網頁結構幾乎相同**：兩組媒體中位數皆為 4，排版中位數皆為 3；",
-        "上學期作品名單內的媒體平均僅高 0.14 分、排版平均高 0.05 分。",
+        f"1. **媒體豐富度有中等差距，排版差異不大**：媒體中位數為 {fmt(media_row['有上學期作品_中位數'],0)}"
+        f"（名單內）／{fmt(media_row['未見上學期作品_中位數'],0)}（名單外），"
+        f"排版中位數為 {fmt(layout_row['有上學期作品_中位數'],0)}／{fmt(layout_row['未見上學期作品_中位數'],0)}；"
+        f"名單內組媒體平均僅高 {media_row['平均差_有減未']:.2f} 分、"
+        f"排版平均高 {layout_row['平均差_有減未']:.2f} 分。",
         f"2. **名單內組的典型篇幅較長**：字數中位數為 {word_prior.median():.0f}，"
         f"名單外組為 {word_new.median():.0f}，差 {word_prior.median()-word_new.median():+.0f} 字。",
         f"但名單外組含一份 {word_new.max():.0f} 字的極長作品，使其平均反而較高；"
         "在此小樣本中，中位數比平均數更能代表典型學生。",
         f"3. **反思比例差異很小且受離群值影響**：名單內中位數 {reflect_prior.median():.1f}%，"
         f"名單外中位數 {reflect_new.median():.1f}%；名單外組有一份 33.3% 作品拉高平均。",
-        "4. **術語密度沒有一致優勢**：名單外組的平均與中位數較高，但這個指標會因短篇作品分母較小而上升。",
+        f"4. **術語密度{'沒有一致優勢' if term_row['平均差_有減未'] < 0 else '略偏名單內組'}**："
+        f"名單{'外' if term_row['平均差_有減未'] < 0 else '內'}組的平均與中位數較高，"
+        "但這個指標會因短篇作品分母較小而上升。",
         "5. 五項精確秩排列比較皆未顯示清楚組間差異（探索性 p 值均大於 .50）。",
         "樣本只有 13 對 5，且非隨機分組，因此不能據此推論修過上學期課程造成效果。",
         "",
@@ -175,12 +183,12 @@ def make_report(grouped: pd.DataFrame, summary: pd.DataFrame) -> str:
         "",
         "## 下學期個別資料",
         "",
-        "| 組別 | 學號 | 姓名 | 媒體 | 排版 | 字數 | 術語密度 | 批判思考% |",
+        "| 組別 | 匿名代碼 | 匿名標籤 | 媒體 | 排版 | 字數 | 術語密度 | 批判思考% |",
         "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |",
     ]
     for _, row in grouped.iterrows():
         lines.append(
-            f"| {row['組別']} | {row['學號']} | {row['姓名']} | "
+            f"| {row['組別']} | {row['匿名代碼']} | 匿名學生 {row['匿名代碼']} | "
             f"{row['媒體豐富度(1-4)']} | {row['排版架構(1-4)']} | "
             f"{row['總字數']} | {row['專有名詞密度(次/千字)']:.2f} | "
             f"{row['批判思考佔比(%)']:.1f} |"
@@ -190,9 +198,10 @@ def make_report(grouped: pd.DataFrame, summary: pd.DataFrame) -> str:
         "",
         "## 結論",
         "",
-        "就下學期期末作品而言，是否出現在上學期作品名單，與媒體豐富度、排版及反思比例的差異都很小。",
+        f"就下學期期末作品而言，名單內組在媒體豐富度上呈現中等幅度的優勢（δ={media_row['Cliffs_delta']:.3f}，"
+        f"精確 p={media_row['精確秩排列_p']:.3f}，未達 .05 門檻），排版與反思比例差異都很小。",
         "較值得注意的是，名單內組的**字數中位數較高**，顯示其典型作品篇幅較長；",
-        "但組間分布高度重疊、樣本不平衡且有離群值，現階段只能作描述性觀察。",
+        "但組間分布高度重疊、樣本不平衡且有離群值，現階段只能作描述性觀察，不宜視為課程效果的證據。",
         "",
     ]
     return "\n".join(lines)

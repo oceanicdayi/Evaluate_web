@@ -10,21 +10,25 @@
 - Abstracts：300 words
 - 審查用研究短文：三頁內；需包含研究目的、研究重要性、研究方法、研究結果與討論、關鍵圖表及參考文獻
 
+> **投稿用完整版本請見 [`submit.md`](submit.md)**（含審查用研究短文、關鍵圖表清單、參考文獻待補清單）。
+> 下方摘要已依實際分析結果（`longitudinal_comparison_2025_2026.md` 等）校正，取代先前未經資料驗證的草稿版本；
+> 詳見 `metric_calculation_method.md` 中「媒體豐富度尺規修正說明」。
+
 ---
 
 ## 中文摘要
 
-隨著生成式 AI 的普及，跨領域資訊素養成為科學教育的重要指標。本研究旨在探討於地球科學課程中，連續兩學期導入 AI 工具（ChatGPT, Gemini）與雲端部署（GitHub, HuggingFace, Google Antigravity），對學生數位作品「品質與內容豐富度」的縱向影響。本研究以台北市立大學「地球物理」與「地震學」課程為場域，學生需將學科知識與實驗心得透過 AI 輔助製作為網頁。為客觀評估成效，本研究捨棄傳統學科測驗，專注於「數位成品分析」，並建立專屬「網頁複雜度尺規（1–4 分）」，量化評估其「媒體豐富度」（從純文字至多重 AI 資源整合）與「排版架構」（從單頁流水帳至 API 動態網頁）。此外，本研究導入「文本分析」，計算學生網頁內容之字數與專有名詞密度，並運用 AI 輔助判定文本中「描述性文字」與「批判性思考」之比例。初步結果顯示，多數學生在下學期之網頁複雜度與批判反思層次皆有顯著提升；值得注意的是，初期學科表現較弱的學生，因 AI 降低寫作門檻與網頁產出的高成就感，其作品的字數、專有名詞密度與媒體豐富度呈現爆發性成長，證實此教學法不僅提升資訊技能，更能有效激發低成就學生的學習動機與學科參與度。
+隨著生成式AI普及，跨領域數位素養成為科學教育重要指標。本研究以台北市立大學「地球物理」與「地震學」兩門連續課程為場域，探討學生兩學期使用AI工具（ChatGPT、Gemini）與雲端部署（GitHub Pages、Hugging Face）產出期末網頁作品之縱向變化。本研究不採學科測驗，改採「數位成品分析」：建立「媒體豐富度」與「排版架構」雙軸尺規，並計算可見字數、專有名詞密度，以關鍵詞法估計批判思考比例。8位高信度配對學生納入班級統計，結果顯示：媒體豐富度由1.75分升至3.25分（6/8人提升）；字數由1,983字增至3,693字（+86.2%）；批判思考比例由6.54%升至10.73%（6/8人提升）；排版架構因多數作品已達導覽水準而近乎持平，屬尺規天花板效應。以「是否列於上學期作品名單」為先備經驗代理變項顯示，先備學生首份作業展現內容量優勢；追蹤至期末，字數與批判思考的組間差距縮小，但媒體豐富度差距反而擴大，顯示先備經驗優勢不會單純隨課程全面消失。研究顯示AI輔助網頁製作有助內容產出與反思成長；惟樣本小、批判思考比例為啟發式估計，發現屬探索性。
 
 ---
 
 ## Abstract
 
-As generative AI becomes ubiquitous, interdisciplinary digital literacy is crucial in science education. This longitudinal study investigates the impact of integrating AI tools (ChatGPT, Gemini) and cloud deployment platforms (GitHub, HuggingFace, Google Antigravity) on the "quality and richness" of students' digital artifacts over two consecutive semesters. Conducted in "Geophysics" and "Seismology" courses at the University of Taipei, students were required to synthesize textbook knowledge and lab reports into web pages using AI.
+As generative AI becomes ubiquitous, cross-disciplinary digital literacy is increasingly central to science education. This longitudinal study examines changes in the complexity and content richness of students' final web projects across two consecutive courses, "Geophysics" and "Seismology," at the University of Taipei, where students used AI tools (ChatGPT, Gemini) and cloud platforms (GitHub Pages, Hugging Face) to turn coursework into public webpages.
 
-To objectively assess learning outcomes, this study bypassed traditional grading and focused exclusively on digital artifact analysis. A custom "Web Complexity Rubric (1–4 scale)" was developed to quantify "Media Richness" (ranging from text-only to complex AI-resource integration) and "Layout Structure" (from linear text to API-driven dynamic pages). Furthermore, text analytics were applied to measure word count and technical terminology density. AI was also utilized to analyze the students' reflection depth, calculating the ratio of descriptive text versus critical thinking.
+Rather than conventional subject-matter testing, this study analyzed the digital artifacts themselves: a two-dimensional rubric (1-4 scale) quantified "media richness" and "layout structure," while text analytics measured visible text length, technical-term density, and a keyword-heuristic estimate of the "critical-thinking" sentence ratio. Among 8 high-confidence matched students, media richness rose from 1.75 to 3.25 (6 of 8 improved, none declined); visible text length rose from 1,983 to 3,693 characters (+86.2%); the critical-thinking ratio rose from 6.54% to 10.73%; layout structure stayed largely flat (a ceiling effect).
 
-Preliminary results indicate a significant increase in both web complexity and critical reflection levels in the second semester. Notably, initially low-achieving students demonstrated exponential growth in word count, terminology density, and media richness. The tangible success of web deployment, combined with AI lowering the writing barrier, significantly boosted their learning motivation and subject engagement. This study provides empirical evidence that integrating AI and web development into STEM courses not only enhances IT skills but also revitalizes the academic participation of underperforming students.
+Using prior-semester portfolio listing as a proxy for prior course experience, students with prior exposure showed an early content-volume advantage. By the final report, the word-count and critical-thinking gaps between groups narrowed, but the media-richness gap widened instead — the prior-exposure group kept gaining while the newly-joined group's average score declined. This suggests AI-assisted web authoring supports longitudinal growth in content production and reflective depth, but prior experience does not simply wash out over the semester. Findings are exploratory, based on a small sample and heuristic text measures.
 
 ---
 
@@ -60,24 +64,25 @@ Preliminary results indicate a significant increase in both web complexity and c
 
 ### 四、研究結果與討論
 
-#### 1. 作品精緻度與技術深度的整體躍升
+#### 1. 作品精緻度與內容篇幅的顯著成長
 
-研究發現，多數學生在上學期初期的媒體豐富度與排版架構多落於 1–2 分；而在下學期（地震學）末期，平均分數顯著提升至 3 分以上，甚至有多位學生達到 4 分，成功導入 Google Antigravity 實現動態網頁。這顯示學生的認知負擔已從「學習 IT 工具」轉移至「利用 IT 工具進行知識展演」。
+8 位高信度配對學生中，媒體豐富度平均由上學期 1.75 分顯著提升至下學期 3.25 分（6 人提升、無人下降），可見文字量由平均 1,983 字增至 3,693 字（+86.2%；7 人增加）。排版架構則因多數學生上學期已具備導覽列與多區塊設計，兩學期差異不大（3.00→2.88），屬評量尺規本身的天花板效應。
 
 #### 2. 文本數據揭示的深度學習
 
-文本分析結果顯示，下學期作業的「專有名詞密度」顯著提高，且「批判性思考文字佔比」亦呈上升趨勢。這表明學生並非僅是將課本內容複製貼上，而是透過 AI 輔助彙整後，釋放了更多認知空間進行高階反思。
+文本分析結果顯示，批判思考訊號比例由平均 6.54% 上升至 10.73%（+4.19 個百分點；6 人提升）；專有名詞密度則呈現分化（8 人中 4 升 4 降），顯示篇幅擴張時分母同步增大，密度不必然隨之提高。整體而言，學生並非僅是將課本內容複製貼上，而是透過 AI 輔助彙整後，釋放了更多認知空間進行高階反思。
 
-#### 3. 激發低成就學生之學習潛能
+#### 3. 先備經驗的早期優勢：期末呈現指標分歧，而非全面收斂
 
-將數據進行分群分析後發現，原本學期初成績不佳的學生，其「字數」與「媒體豐富度評分」的進步幅度（Gain Score）最為劇烈。訪談與課堂觀察指出，對這群學生而言，傳統紙筆測驗容易帶來挫折，但「產出一個精美的動態網頁」賦予了他們極大的成就感。AI 彌補了他們在文字組織上的弱勢，使他們願意投入更多時間優化排版、增加圖表，無形中大幅提升了對課程內容的參與度與停留時間。
+以「上學期作品名單」為先備經驗代理變項比較下學期第一份作業，先備組（13 人）在內容量、專有名詞絕對使用次數與主題涵蓋數上均優於新加入組（5 人）。追蹤至期末報告後，字數與批判思考比例的組間差距縮小，與「未修過上學期課程者逐步追上」的描述一致；但**媒體豐富度效果量反而由 δ=0.077 升至 δ=0.462**（先備組媒體平均由 2.92 分升至 3.38 分，新加入組則由 2.80 分降至 2.60 分），顯示先備經驗在「媒體整合」面向的優勢並未隨課程進行而消失。本研究未取得學生先備學科成績，因此無法、也不宜以「高／低成就」分群；上述分組僅以上學期作品名單作為先備經驗代理變項，且樣本小、非隨機分組，僅能視為探索性趨勢。
 
-### 五、關鍵圖表（建議置入）
+### 五、關鍵圖表
 
-- **圖一**：學生網頁作品複雜度（媒體與排版）上下學期評分分佈直方圖。
-- **圖二**：文本分析趨勢圖——上下學期「專有名詞密度」與「批判反思比例」之散佈圖，並以不同顏色標示高／低成就分群，展現低成就組的顯著位移。
-- **建議補充**：挑選 1–2 位進步最多學生的網頁截圖（上學期流水帳 vs. 下學期精美網頁），作為輔助圖表。
+- **圖一**（`figure1_web_complexity_distribution`）：8 位高信度配對學生上、下學期媒體豐富度與排版架構評分分布——媒體由上學期以 1–2 分為主，轉為下學期 5/8 人達 4 分；排版兩學期皆以 3 分導覽分區為主。
+- **圖二**（`figure2_text_analytics_trajectory`）：文本分析指標（字數、術語密度、批判思考比例）之跨學期位移散佈圖；因未取得先備成績，不作高／低成就分群。
+- **圖五**（`figure5_hw2_to_final_group_trajectories`）：先備組與新加入組自下學期第一份作業至期末之平均軌跡——字數與批判思考比例差距收斂，媒體豐富度則反向擴大。
+- **建議補充**：以匿名代表案例 G-01（上學期地球物理期末專題）與 S-01（下學期地震學整合平台）之網頁截圖，作為質性佐證。
 
 ### 六、參考文獻
 
-（待補：請依投稿格式補上相關文獻）
+（待補：請依投稿格式補上相關文獻，勿使用未經查核之書目）

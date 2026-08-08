@@ -1,6 +1,6 @@
 ﻿匿名代碼,學期,平台,附件數,狀態,媒體豐富度(1-4),排版架構(1-4),總字數,專有名詞出現次數,專有名詞密度(次/千字),批判思考佔比(%),反思評量方法,img數,互動元件數,互動標籤,進階腳本,動態API,命中專有名詞
 S015,Seismology_2026_final,Hugging Face Space,2,ok,2,3,3955,131,33.12,10.2,heuristic,19,0,,False,False,Antigravity×1; refraction×1; 地球物理×2; 震源機制×7; 表面波×1; 直達波×1; 地震波×5; 反射波×1; 地震學×13; 規模×2; 波速×1; 地震×41; 走時×2; 反射×4; 體波×1; 斷層×14; 折射×3; 介質×2; 震波×6; 震源×12
-S020,Seismology_2026_final,GitHub Pages,0,ok,4,3,1546,17,11.0,33.3,heuristic,3,5,svg,False,False,reflection×1; 地震×12; 震波×1; 震度×3
+S020,Seismology_2026_final,GitHub Pages,0,ok,2,3,1546,17,11.0,33.3,heuristic,3,5,svg,False,False,reflection×1; 地震×12; 震波×1; 震度×3
 S012,Seismology_2026_final,GitHub Pages,0,ok,3,2,394,17,43.15,0.0,heuristic,0,1,iframe,False,False,震源機制×2; 地震學×6; 地震×7; 震源×2
 S022,Seismology_2026_final,GitHub Pages,4,ok,4,3,6802,62,9.11,18.2,heuristic,0,2,iframe,False,False,seismic×1; 震源機制×2; 地震學×14; 地震×34; 走時×2; 反射×1; 斷層×1; 折射×1; 震波×3; 震源×2; 震度×1
 S006,Seismology_2026_final,Hugging Face Space,2,ok,4,2,6902,137,19.85,17.2,heuristic,20,22,"canvas,video",True,False,震源機制×6; 直達波×1; 地震波×4; 反射波×1; 地震學×5; 防災×1; 規模×1; 地函×3; 波速×3; 地震×52; 走時×7; 反射×1; P波×5; 斷層×19; 折射×1; 介質×1; S波×1; 震波×5; 震源×12; 地質×1
@@ -18,5 +18,5 @@ S014,Seismology_2026_final,Hugging Face Space,2,ok,4,3,6066,99,16.32,11.1,heuris
 S021,Seismology_2026_final,GitHub Pages,2,ok,3,3,507,26,51.28,12.5,heuristic,0,1,iframe,False,False,震源機制×4; 地震波×2; 地震學×4; 地震×6; 反射×1; 折射×1; 震波×2; 震源×4; 液化×1; 地核×1
 S011,Seismology_2026_final,Hugging Face Space,2,ok,4,3,5087,135,26.54,4.3,heuristic,5,12,"canvas,iframe,svg,video",False,False,Antigravity×1; epicenter×1; seismic×1; P-wave×1; S-wave×1; 地球物理×1; 震源機制×9; STEM×2; 地震波×3; 地震學×15; 防災×1; 波速×2; 地震×51; 走時×10; 反射×2; P波×3; 斷層×4; 折射×2; 介質×2; S波×2
 S007,Seismology_2026_final,GitHub Pages,0,ok,2,3,4053,173,42.68,16.7,heuristic,3,0,,False,False,Google Antigravity×1; Antigravity×7; seismic×1; 震源機制×15; 地震波×7; 地震學×30; 防災×10; 規模×1; 地震×64; 走時×3; 反射×1; P波×1; 斷層×2; 折射×1; S波×1; 震波×10; 震源×16; 地質×2
-S017,Seismology_2026_final,GitHub Pages,2,ok,4,3,3361,106,31.54,8.3,heuristic,4,9,svg,False,False,震源機制×8; 地震波×5; 地震學×19; 防災×3; 地震×50; 走時×1; 斷層×1; 折射×1; 震波×5; 震源×13
-S018,Seismology_2026_final,Hugging Face Space,2,ok,4,3,13091,282,21.54,7.6,heuristic,0,6,svg,False,False,epicenter×1; seismic×1; 地球物理×2; 震源機制×3; 表面波×3; 直達波×8; 地震波×8; 反射波×7; 地震學×11; 折射波×16; 防災×5; 規模×1; 地函×5; 波速×6; 地震×55; 走時×27; 反射×10; P波×6; 體波×3; 斷層×17
+S017,Seismology_2026_final,GitHub Pages,2,ok,2,3,3361,106,31.54,8.3,heuristic,4,9,svg,False,False,震源機制×8; 地震波×5; 地震學×19; 防災×3; 地震×50; 走時×1; 斷層×1; 折射×1; 震波×5; 震源×13
+S018,Seismology_2026_final,Hugging Face Space,2,ok,2,3,13091,282,21.54,7.6,heuristic,0,6,svg,False,False,epicenter×1; seismic×1; 地球物理×2; 震源機制×3; 表面波×3; 直達波×8; 地震波×8; 反射波×7; 地震學×11; 折射波×16; 防災×5; 規模×1; 地函×5; 波速×6; 地震×55; 走時×27; 反射×10; P波×6; 體波×3; 斷層×17

@@ -171,8 +171,15 @@ def adjust_client_rendered_scores(row: dict, html: str) -> None:
 
 
 def analyze_archive(archive: str, prior_csv: str) -> pd.DataFrame:
-    prior = pd.read_csv(prior_csv, dtype={"學號": str})
-    prior_ids = set(prior["學號"].dropna())
+    # NOTE: `sid` below comes straight from the ZIP folder names (real student
+    # IDs). Published `prior_csv` files are de-identified down to one-time
+    # anonymous codes (匿名代碼) with no crosswalk kept in this repo (see
+    # PRIVACY.md), so this membership check only works when `prior_csv` still
+    # carries real IDs (e.g. a private, not-committed export). Re-running this
+    # against a de-identified prior_csv will silently classify everyone as
+    # NEW_GROUP — check the ID space before trusting the group column.
+    prior = pd.read_csv(prior_csv, dtype={"匿名代碼": str})
+    prior_ids = set(prior["匿名代碼"].dropna())
     rows = []
 
     with open_archive(archive) as zf:

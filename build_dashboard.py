@@ -389,7 +389,7 @@ def main() -> int:
           </article>
           <article class="card coral">
             <div class="metric-label">媒體豐富度</div>
-            <div class="metric-value">1.75 → 3.50</div>
+            <div class="metric-value">1.75 → 3.25</div>
             <div class="metric-detail">同一批學生由基礎呈現走向互動整合</div>
           </article>
           <article class="card teal">
@@ -433,7 +433,7 @@ def main() -> int:
           <p class="section-note">13 人同名同學號配對；班級平均採 8 組高信度、可完整讀取的作品。</p>
         </div>
         <div class="grid grid-3">
-          <div class="compare-card"><h3>媒體豐富度 <span class="delta">+1.75</span></h3><div class="bar-row"><span>上學期</span><div class="track"><div class="fill alt" style="width:43.75%"></div></div><b>1.75</b></div><div class="bar-row"><span>下學期</span><div class="track"><div class="fill" style="width:87.5%"></div></div><b>3.50</b></div></div>
+          <div class="compare-card"><h3>媒體豐富度 <span class="delta">+1.50</span></h3><div class="bar-row"><span>上學期</span><div class="track"><div class="fill alt" style="width:43.75%"></div></div><b>1.75</b></div><div class="bar-row"><span>下學期</span><div class="track"><div class="fill" style="width:81.25%"></div></div><b>3.25</b></div></div>
           <div class="compare-card"><h3>平均字數 <span class="delta">+1,710</span></h3><div class="bar-row"><span>上學期</span><div class="track"><div class="fill alt" style="width:53.7%"></div></div><b>1,983</b></div><div class="bar-row"><span>下學期</span><div class="track"><div class="fill" style="width:100%"></div></div><b>3,693</b></div></div>
           <div class="compare-card"><h3>批判思考訊號 <span class="delta">+4.19 pp</span></h3><div class="bar-row"><span>上學期</span><div class="track"><div class="fill alt" style="width:61%"></div></div><b>6.54</b></div><div class="bar-row"><span>下學期</span><div class="track"><div class="fill" style="width:100%"></div></div><b>10.73</b></div></div>
         </div>
@@ -445,7 +445,7 @@ def main() -> int:
         <div class="figure-grid">
           <figure class="figure-card">
             <img src="figure1_web_complexity_distribution.svg" alt="圖一：媒體豐富度與排版架構在上下學期的一至四分人數分布長條圖">
-            <figcaption><strong>圖一　學生網頁作品複雜度評分分布。</strong>媒體豐富度由上學期的 1–2 分為主，轉為下學期 6/8 人達 4 分；排版則兩學期皆以 3 分導覽分區為主。</figcaption>
+            <figcaption><strong>圖一　學生網頁作品複雜度評分分布。</strong>媒體豐富度由上學期的 1–2 分為主，轉為下學期 5/8 人達 4 分；排版則兩學期皆以 3 分導覽分區為主。</figcaption>
           </figure>
           <figure class="figure-card">
             <img src="figure2_text_analytics_trajectory.svg" alt="圖二：八位學生的專有名詞密度與批判思考比例跨學期散布及移動箭頭">
@@ -530,7 +530,7 @@ def main() -> int:
           </figure>
           <figure class="figure-card">
             <img src="figure5_hw2_to_final_group_trajectories.svg" alt="圖五：先備組與新加入組從第一個作業到期末的五項平均軌跡">
-            <figcaption><strong>圖五　兩組的平均軌跡。</strong>新加入組在媒體與反思訊號上的增幅較大，與期末時組間差距縮小的描述一致；不同任務間只作描述性比較。</figcaption>
+            <figcaption><strong>圖五　兩組的平均軌跡。</strong>新加入組在批判思考訊號上增幅較大；媒體豐富度則以先備組增幅較大（新加入組平均反而下降），與「差距逐步縮小」的描述不一致；不同任務間只作描述性比較。</figcaption>
           </figure>
         </div>
         <article class="report-shell" style="margin-top:46px"><div id="report-stage-changes" class="prose"></div></article>

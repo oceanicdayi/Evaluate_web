@@ -161,10 +161,10 @@ def build_deep_summary(data: pd.DataFrame) -> pd.DataFrame:
 def stage_effects(
     assignment: pd.DataFrame, final_csv: str
 ) -> pd.DataFrame:
-    final = pd.read_csv(final_csv, dtype={"學號": str})
+    final = pd.read_csv(final_csv, dtype={"匿名代碼": str})
     common = assignment.merge(
         final,
-        on=["學號", "姓名"],
+        on="匿名代碼",
         suffixes=("_作業", "_期末"),
         validate="one_to_one",
     )
@@ -277,6 +277,7 @@ def make_report(
         "| 指標 | 作業平均差／δ | 期末平均差／δ |",
         "| --- | ---: | ---: |",
     ]
+    widened, narrowed = [], []
     for metric in stages["指標"].unique():
         hw = stages[(stages["指標"].eq(metric)) & (stages["階段"].eq("第一個網頁作業"))].iloc[0]
         final = stages[(stages["指標"].eq(metric)) & (stages["階段"].eq("期末報告"))].iloc[0]
@@ -284,11 +285,22 @@ def make_report(
             f"| {metric} | {hw['平均差_內減外']:+.2f}／{hw['Cliffs_delta']:.3f} | "
             f"{final['平均差_內減外']:+.2f}／{final['Cliffs_delta']:.3f} |"
         )
+        if abs(final["Cliffs_delta"]) > abs(hw["Cliffs_delta"]) + 1e-9:
+            widened.append(metric)
+        elif abs(final["Cliffs_delta"]) < abs(hw["Cliffs_delta"]) - 1e-9:
+            narrowed.append(metric)
 
+    # 動態描述各指標效果量在期末是擴大或縮小，避免文字與實際重新計算後的
+    # 數字脫節（先前版本曾寫死「都縮小」，媒體豐富度修正後其實是擴大）。
+    trend_bits = []
+    if narrowed:
+        trend_bits.append(f"{'、'.join(narrowed)}的組間效果量到期末縮小，與「未修過上學期課程者逐步追上」的解釋一致")
+    if widened:
+        trend_bits.append(f"{'、'.join(widened)}的組間效果量到期末反而擴大，不支持單純的追趕敘事")
     lines += [
         "",
-        "媒體、篇幅與反思訊號的組間效果量到期末均縮小，與「未修過上學期課程者逐步追上」的解釋一致；",
-        "但兩階段作業要求不同，因此不能把變化完全歸因於追趕效果。",
+        "；".join(trend_bits) + "。" if trend_bits else "",
+        "兩階段作業要求不同，效果量變化混雜任務差異，因此不能把變化完全歸因於追趕或差距擴大。",
         "",
         "## 最穩健的表述",
         "",
