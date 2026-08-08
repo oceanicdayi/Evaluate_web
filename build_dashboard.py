@@ -105,6 +105,7 @@ def main() -> int:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="臺北市立大學地球物理與地震學學生網頁作品之縱向分析、組間比較與代表案例。">
   <meta name="theme-color" content="#092126">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23071c21'/%3E%3Cpath d='M8 35h10l5-16 8 31 7-25 5 10h13' fill='none' stroke='%238bd5cb' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <title>從地球物理到地震學｜學生數位作品研究儀表板</title>
   <style>
     :root {
