@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="980" viewBox="0 0 1400 980" role="img" aria-labelledby="title desc">
+<title id="title">圖五：下學期兩組學生由第一個網頁作業到期末的平均軌跡</title>
+<desc id="desc">先備組與新加入組在媒體、排版、文本字元、術語密度和批判思考比例的平均值由第一個作業到期末的變化。</desc>
+<rect width="1400" height="980" rx="28" fill="#fbf8ef"/>
+<text x="60" y="64" fill="#123137" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="34" font-weight="800">圖五　第一個網頁作業到期末的組別平均軌跡</text>
+<text x="60" y="104" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="18">共同學生 n=18｜先備組 13 人；新加入組 5 人</text>
+<circle cx="1080" cy="72" r="8" fill="#159e94"/><text x="1098" y="78" fill="#123137" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="15">先備組</text>
+<circle cx="1190" cy="72" r="8" fill="#e66f5b"/><text x="1208" y="78" fill="#123137" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="15">新加入組</text>
+<rect x="60" y="160" width="400" height="300" rx="20" fill="#ffffff" stroke="#ded9cc"/>
+<text x="84" y="198" fill="#123137" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="20" font-weight="760">媒體豐富度</text>
+<line x1="155" y1="408" x2="385" y2="408" stroke="#d9d5ca"/>
+<text x="155" y="436" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">第一個作業</text>
+<text x="385" y="436" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">期末</text>
+<line x1="155" y1="297.3" x2="385" y2="258.8" stroke="#159e94" stroke-width="4"/>
+<circle cx="155" cy="297.3" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<circle cx="385" cy="258.8" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<text x="145" y="287.3" text-anchor="end" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">3.23</text>
+<text x="395" y="248.8" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">3.54</text>
+<line x1="155" y1="351.2" x2="385" y2="276.1" stroke="#e66f5b" stroke-width="4"/>
+<circle cx="155" cy="351.2" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<circle cx="385" cy="276.1" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<text x="145" y="341.2" text-anchor="end" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">2.80</text>
+<text x="395" y="266.1" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">3.40</text>
+<rect x="500" y="160" width="400" height="300" rx="20" fill="#ffffff" stroke="#ded9cc"/>
+<text x="524" y="198" fill="#123137" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="20" font-weight="760">排版架構</text>
+<line x1="595" y1="408" x2="825" y2="408" stroke="#d9d5ca"/>
+<text x="595" y="436" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">第一個作業</text>
+<text x="825" y="436" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">期末</text>
+<line x1="595" y1="299.4" x2="825" y2="299.4" stroke="#159e94" stroke-width="4"/>
+<circle cx="595" cy="299.4" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<circle cx="825" cy="299.4" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<text x="585" y="289.4" text-anchor="end" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">2.85</text>
+<text x="835" y="289.4" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">2.85</text>
+<line x1="595" y1="310.6" x2="825" y2="310.6" stroke="#e66f5b" stroke-width="4"/>
+<circle cx="595" cy="310.6" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<circle cx="825" cy="310.6" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<text x="585" y="300.6" text-anchor="end" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">2.80</text>
+<text x="835" y="300.6" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">2.80</text>
+<rect x="940" y="160" width="400" height="300" rx="20" fill="#ffffff" stroke="#ded9cc"/>
+<text x="964" y="198" fill="#123137" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="20" font-weight="760">可見文本字元數</text>
+<line x1="1035" y1="408" x2="1265" y2="408" stroke="#d9d5ca"/>
+<text x="1035" y="436" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">第一個作業</text>
+<text x="1265" y="436" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">期末</text>
+<line x1="1035" y1="242.5" x2="1265" y2="325.4" stroke="#159e94" stroke-width="4"/>
+<circle cx="1035" cy="242.5" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<circle cx="1265" cy="325.4" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<text x="1025" y="232.5" text-anchor="end" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">5,030</text>
+<text x="1275" y="315.4" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">3,802</text>
+<line x1="1035" y1="367.5" x2="1265" y2="296.7" stroke="#e66f5b" stroke-width="4"/>
+<circle cx="1035" cy="367.5" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<circle cx="1265" cy="296.7" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<text x="1025" y="357.5" text-anchor="end" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">3,179</text>
+<text x="1275" y="286.7" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">4,227</text>
+<rect x="280" y="520" width="400" height="300" rx="20" fill="#ffffff" stroke="#ded9cc"/>
+<text x="304" y="558" fill="#123137" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="20" font-weight="760">術語密度</text>
+<line x1="375" y1="768" x2="605" y2="768" stroke="#d9d5ca"/>
+<text x="375" y="796" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">第一個作業</text>
+<text x="605" y="796" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">期末</text>
+<line x1="375" y1="687.2" x2="605" y2="727.5" stroke="#159e94" stroke-width="4"/>
+<circle cx="375" cy="687.2" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<circle cx="605" cy="727.5" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<text x="365" y="677.2" text-anchor="end" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">29.84</text>
+<text x="615" y="717.5" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">26.48</text>
+<line x1="375" y1="602.5" x2="605" y2="701.5" stroke="#e66f5b" stroke-width="4"/>
+<circle cx="375" cy="602.5" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<circle cx="605" cy="701.5" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<text x="365" y="592.5" text-anchor="end" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">36.91</text>
+<text x="615" y="691.5" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">28.65</text>
+<rect x="720" y="520" width="400" height="300" rx="20" fill="#ffffff" stroke="#ded9cc"/>
+<text x="744" y="558" fill="#123137" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="20" font-weight="760">批判思考比例（%）</text>
+<line x1="815" y1="768" x2="1045" y2="768" stroke="#d9d5ca"/>
+<text x="815" y="796" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">第一個作業</text>
+<text x="1045" y="796" text-anchor="middle" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">期末</text>
+<line x1="815" y1="683.1" x2="1045" y2="627.3" stroke="#159e94" stroke-width="4"/>
+<circle cx="815" cy="683.1" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<circle cx="1045" cy="627.3" r="7" fill="#159e94" stroke="white" stroke-width="2"/>
+<text x="805" y="673.1" text-anchor="end" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">9.72</text>
+<text x="1055" y="617.3" fill="#159e94" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">12.67</text>
+<line x1="815" y1="727.5" x2="1045" y2="602.5" stroke="#e66f5b" stroke-width="4"/>
+<circle cx="815" cy="727.5" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<circle cx="1045" cy="602.5" r="7" fill="#e66f5b" stroke="white" stroke-width="2"/>
+<text x="805" y="717.5" text-anchor="end" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">7.38</text>
+<text x="1055" y="592.5" fill="#e66f5b" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="13" font-weight="750">13.98</text>
+<text x="60" y="940" fill="#617477" font-family="'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif" font-size="14">註：組別以是否出現在上學期作品名單為代理；兩階段任務要求不同，軌跡為描述性比較。</text>
+</svg>
