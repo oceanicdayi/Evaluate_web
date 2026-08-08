@@ -1,0 +1,338 @@
+{
+  "index": "https://oceanicdayi.github.io/2025_Geophysics_Final_Report/student_works.html",
+  "student_count": 19,
+  "students": [
+    {
+      "id": 1,
+      "studentId": "u11104006",
+      "name": "林圻蓁",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://chilin2tb-stack.github.io/U11104006_final/index.html",
+          "label": "作品網站"
+        }
+      ],
+      "type": "github",
+      "late": false,
+      "featured": true
+    },
+    {
+      "id": 2,
+      "studentId": "u11104022",
+      "name": "張以蓁",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://z72123.github.io/U11104022-Final-Project-Report/#home",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://github.com/z72123/U11104022-Final-Project-Report",
+          "label": "GitHub Repository"
+        },
+        {
+          "url": "https://gemini.google.com/share/13729133804c",
+          "label": "Gemini分享"
+        },
+        {
+          "url": "https://github.com/oceanicdayi/2025_Geophysics_Final_Report/blob/main/%E5%8F%B2%E5%9C%B0%E7%94%9F%E7%94%A8_Python_%E8%AE%80%E6%87%82%E5%9C%B0%E7%90%83%E6%96%B0%E8%AA%9E%E8%A8%80.m4a",
+          "label": "🎧 語音摘要 (NotebookLM)"
+        }
+      ],
+      "type": "github",
+      "late": false,
+      "special": [
+        "gemini"
+      ],
+      "featured": true
+    },
+    {
+      "id": 3,
+      "studentId": "u11210021",
+      "name": "黃冠維",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://samuel10727.github.io/2025termreport-01/",
+          "label": "作品網站"
+        }
+      ],
+      "type": "github",
+      "late": false
+    },
+    {
+      "id": 4,
+      "studentId": "u11310002",
+      "name": "陳亞歆",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://yaxin06.github.io/2025_term_report_geophysics_new/",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://github.com/yaxin06/2025_term_report_geophysics_new",
+          "label": "GitHub Repository"
+        }
+      ],
+      "type": "github",
+      "late": false
+    },
+    {
+      "id": 5,
+      "studentId": "u11310003",
+      "name": "陳佑昇",
+      "date": "2025-12-22",
+      "links": [
+        {
+          "url": "https://gemini.google.com/share/dba19d459ab7",
+          "label": "Gemini分享"
+        }
+      ],
+      "type": "gemini",
+      "late": false
+    },
+    {
+      "id": 6,
+      "studentId": "u11310004",
+      "name": "邱定軒",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://u11310004.github.io/final-term_report_draft/",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://ominous-meme-5gpjp9qwr6gqf76qj.github.dev/",
+          "label": "開發環境"
+        }
+      ],
+      "type": "github",
+      "late": false
+    },
+    {
+      "id": 7,
+      "studentId": "u11310007",
+      "name": "楊廂甯",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://icon826.github.io/finalreport/",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://github.com/Icon826/finalreport",
+          "label": "GitHub Repository"
+        },
+        {
+          "url": "https://colab.research.google.com/drive/1cTlBS0sP2PgMDNxXaYIV8SugFen9Gzo2",
+          "label": "Colab - 台灣地形圖"
+        }
+      ],
+      "type": "github",
+      "late": false,
+      "special": [
+        "colab"
+      ]
+    },
+    {
+      "id": 8,
+      "studentId": "u11310009",
+      "name": "李政暟",
+      "date": "2025-12-22",
+      "links": [
+        {
+          "url": "https://zxcvbnm010043-bot.github.io/2025_term_report_geophysics/",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://github.com/zxcvbnm010043-bot/2025_term_report_geophysics/tree/main/docs",
+          "label": "GitHub Repository"
+        }
+      ],
+      "type": "github",
+      "late": false
+    },
+    {
+      "id": 9,
+      "studentId": "u11310011",
+      "name": "鍾秉致",
+      "date": "2025-12-25",
+      "links": [
+        {
+          "url": "https://u11310011-stack.github.io/2025_term_report_geophysics/",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://github.com/u11310011-stack/2025_term_report_geophysics",
+          "label": "GitHub Repository"
+        }
+      ],
+      "type": "github",
+      "late": false
+    },
+    {
+      "id": 10,
+      "studentId": "u11310015",
+      "name": "曾柏凱",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://tsengpokai.github.io/chimo_finalreport/",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://tsengpokai.github.io/chimo_finalreport/detail.html?id=week15",
+          "label": "週次報告"
+        }
+      ],
+      "type": "github",
+      "late": false,
+      "featured": true
+    },
+    {
+      "id": 11,
+      "studentId": "u11310016",
+      "name": "張智詠",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://earthearthton-prog.github.io/finalterm/",
+          "label": "作品網站"
+        }
+      ],
+      "type": "github",
+      "late": false
+    },
+    {
+      "id": 12,
+      "studentId": "u11310017",
+      "name": "黃靖家",
+      "date": "2025-12-20",
+      "links": [
+        {
+          "url": "https://jinjia0618.github.io/geophysic-final-report/",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://github.com/JinJia0618/geophysic-final-report",
+          "label": "GitHub Repository"
+        }
+      ],
+      "type": "github",
+      "late": false,
+      "featured": true
+    },
+    {
+      "id": 13,
+      "studentId": "u11310019",
+      "name": "林煜宸",
+      "date": "2025-12-23",
+      "links": [
+        {
+          "url": "https://gemini.google.com/share/5019b7404863",
+          "label": "Gemini分享"
+        },
+        {
+          "url": "https://github.com/diego950427/HWAND/blob/main/index.html",
+          "label": "GitHub Repository"
+        }
+      ],
+      "type": "gemini",
+      "late": false,
+      "special": [
+        "github"
+      ]
+    },
+    {
+      "id": 14,
+      "studentId": "u11310021",
+      "name": "何宣樂",
+      "date": "2025-12-23",
+      "links": [
+        {
+          "url": "https://geophysicfinal-io8r4zmkwwfbg8mas5jawq.streamlit.app/",
+          "label": "Streamlit應用"
+        }
+      ],
+      "type": "streamlit",
+      "late": false
+    },
+    {
+      "id": 15,
+      "studentId": "u11310022",
+      "name": "陳柏亘",
+      "date": "2025-12-22",
+      "links": [
+        {
+          "url": "https://utels2425-beep.github.io/final-report2/",
+          "label": "作品網站"
+        }
+      ],
+      "type": "github",
+      "late": false
+    },
+    {
+      "id": 16,
+      "studentId": "u11310028",
+      "name": "林靖融",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://rrrnnn0518-ux.github.io/finalterm_report/",
+          "label": "地球物理學課程筆記"
+        }
+      ],
+      "type": "github",
+      "late": false,
+      "featured": true
+    },
+    {
+      "id": 17,
+      "studentId": "u11310029",
+      "name": "洪敏書",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://minh891711.github.io/2025_finalterm_report_geophysics/",
+          "label": "作品網站"
+        },
+        {
+          "url": "https://github.com/minh891711/2025_finalterm_report_geophysics",
+          "label": "GitHub Repository"
+        }
+      ],
+      "type": "github",
+      "late": false
+    },
+    {
+      "id": 18,
+      "studentId": "u11310032",
+      "name": "黃湘甯",
+      "date": "2025-12-24",
+      "links": [
+        {
+          "url": "https://gemini.google.com/share/99c83df05eaf",
+          "label": "Gemini分享"
+        }
+      ],
+      "type": "gemini",
+      "late": false
+    },
+    {
+      "id": 19,
+      "studentId": "u11310033",
+      "name": "闕嘉潁",
+      "date": "2025-12-21",
+      "links": [
+        {
+          "url": "https://u11310033-collab.github.io/final_tern/index.html",
+          "label": "作品網站"
+        }
+      ],
+      "type": "github",
+      "late": false
+    }
+  ]
+}
