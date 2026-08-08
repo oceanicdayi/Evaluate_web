@@ -1,0 +1,254 @@
+這是一個非常實務且關鍵的步驟！要量化學生的網頁作品，我們可以使用 Python 來撰寫一個自動化分析程式。這個程式將會讀取學生的網頁原始碼（HTML）與報告內容，並針對您提出的四個維度（媒體呈現、排版架構、專有名詞密度、反思層次）進行自動評分與數據萃取。
+
+
+以下我為您量身打造的 Python 分析程式架構。這個程式使用了 BeautifulSoup 來解析網頁複雜度，並展示了如何串接 Gemini API 來進行批判性反思層次的文本分析。
+
+
+準備工作
+
+
+在執行程式前，您需要安裝相關的 Python 套件：
+
+
+pip install beautifulsoup4 pandas google-generativeai
+
+
+
+Python 實作程式碼：數位作品縱向分析系統
+
+
+import re
+import pandas as pd
+from bs4 import BeautifulSoup
+import google.generativeai as genai
+
+# ==========================================
+# 1. 初始化與設定
+# ==========================================
+# 請替換為您的 Gemini API Key (用於反思層次分析)
+API_KEY = "YOUR_GEMINI_API_KEY" 
+genai.configure(api_key=API_KEY)
+
+# 地球科學/地震學 專有名詞字典 (可自行擴充)
+EARTH_SCIENCE_DICT = [
+    "地震", "斷層", "板塊", "震波", "P波", "S波", "規模", "震度", 
+    "地函", "地核", "重力異常", "磁力異常", "震源機制", "液化", "Google Antigravity"
+]
+
+# ==========================================
+# 2. 核心分析函數
+# ==========================================
+
+def analyze_web_complexity(html_content):
+    """
+    分析網頁複雜度，回傳「媒體豐富度」與「排版架構」分數 (1-4分)
+    """
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # --- 評估 A: 媒體豐富度 (Media Richness) ---
+    media_score = 1
+    has_img = soup.find_all('img')
+    has_interactive = soup.find_all(['canvas', 'svg', 'audio', 'video', 'iframe'])
+    has_advanced_scripts = soup.find_all('script', string=re.compile(r'antigravity|three\.js|d3|chart', re.I))
+    
+    if has_advanced_scripts or len(has_interactive) > 1:
+        media_score = 4 # 整合進階/動態資源
+    elif has_interactive:
+        media_score = 3 # 有互動或多媒體
+    elif has_img:
+        media_score = 2 # 基本圖文
+        
+    # --- 評估 B: 排版與架構 (Layout Structure) ---
+    layout_score = 1
+    has_structure = soup.find_all(['h1', 'h2', 'div', 'section'])
+    has_nav = soup.find_all(['nav', 'header', 'footer'])
+    has_api_or_dynamic = soup.find_all('script', string=re.compile(r'fetch\(|axios|api', re.I))
+    
+    if has_api_or_dynamic:
+        layout_score = 4 # 運用 API 或動態資料
+    elif has_nav and len(has_structure) > 3:
+        layout_score = 3 # 明確導覽列與分頁架構
+    elif has_structure:
+        layout_score = 2 # 有基本段落區隔
+
+    return media_score, layout_score
+
+def analyze_text_density(html_content):
+    """
+    計算字數與專有名詞密度
+    """
+    soup = BeautifulSoup(html_content, 'html.parser')
+    # 提取純文字並去除多餘空白
+    text = soup.get_text(separator=' ', strip=True)
+    
+    # 計算中文字數 (包含標點)
+    total_length = len(text)
+    if total_length == 0:
+        return 0, 0, text
+        
+    # 計算專有名詞出現次數
+    term_count = sum(text.count(term) for term in EARTH_SCIENCE_DICT)
+    
+    # 計算密度 (每千字出現次數，或百分比)
+    density = (term_count / total_length) * 1000 
+    
+    return total_length, round(density, 2), text
+
+def analyze_reflection_level(text):
+    """
+    使用 Gemini 分析文本中的「描述性文字」與「批判性思考文字」比例
+    """
+    if len(text) < 50: # 文本過短不具分析意義
+        return 0.0
+
+    prompt = f"""
+    你是一個教育評量專家。請分析以下學生的報告文本，區分出「描述性文字」(單純描述課本知識、實驗步驟) 與「批判性思考文字」(包含探討優缺點、提出疑問、反思、比較差異、個人洞見)。
+    請直接回傳一個數字（0 到 100），代表「批判性思考文字」在整篇文章中所佔的百分比。不要回傳其他文字。
+    
+    學生文本：
+    {text[:3000]} # 限制字數以符合 token 限制
+    """
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content(prompt)
+        critical_ratio = float(response.text.strip())
+        return critical_ratio
+    except Exception as e:
+        print(f"AI 分析出錯: {e}")
+        return 0.0 # 若未設定 API Key，可先回傳 0.0 作為預設值
+
+# ==========================================
+# 3. 執行分析與資料整理
+# ==========================================
+
+def process_student_data(student_records):
+    """
+    處理所有學生的資料並輸出為 DataFrame
+    """
+    results = []
+    
+    for record in student_records:
+        student_id = record['student_id']
+        semester = record['semester']
+        html = record['html_content']
+        
+        # 1. 網頁複雜度尺規
+        media, layout = analyze_web_complexity(html)
+        
+        # 2. 文本分析 (字數與密度)
+        word_count, density, pure_text = analyze_text_density(html)
+        
+        # 3. 反思層次 (AI 評量)
+        # 注意：大量跑資料時要注意 API 速率限制
+        critical_ratio = analyze_reflection_level(pure_text) 
+        
+        results.append({
+            "學號": student_id,
+            "學期": semester,
+            "媒體豐富度(1-4)": media,
+            "排版架構(1-4)": layout,
+            "總字數": word_count,
+            "專有名詞密度(次/千字)": density,
+            "批判思考佔比(%)": critical_ratio
+        })
+        
+    return pd.DataFrame(results)
+
+# ==========================================
+# 4. 測試範例 (模擬學生上下學期的作品)
+# ==========================================
+if __name__ == "__main__":
+    
+    # 模擬資料：同一個學生(S001) 上學期 vs 下學期的網頁作業
+    dummy_data = [
+        {
+            "student_id": "S001",
+            "semester": "Fall (地球物理)",
+            "html_content": "<html><body><p>今天上地球物理，學到了重力異常。課本說重力異常跟地底下密度有關。</p></body></html>"
+        },
+        {
+            "student_id": "S001",
+            "semester": "Spring (地震學)",
+            "html_content": """
+            <html>
+                <header><nav>首頁 | 實驗數據 | 反思</nav></header>
+                <body>
+                    <h1>地震波(P波與S波)分析</h1>
+                    <div><canvas id="myChart"></canvas></div>
+                    <script src="chart.js"></script>
+                    <script> fetch('api/data') </script>
+                    <p>在這次地震學實驗中，我們觀測了P波與S波的走時差異。
+                    我發現，雖然課本公式是線性的，但實際疊加 Google Antigravity 模擬後，
+                    邊界條件的誤差高達15%。這讓我反思，單一的理論模型是否真的能套用在複雜的斷層構造上？
+                    或許結合 AI 的預測模型能彌補傳統測量工具的侷限。</p>
+                </body>
+            </html>
+            """
+        }
+    ]
+    
+    # 若您有真實 API Key，它會呼叫 AI 算反思比例；若無，請先註解掉 API 呼叫那行。
+    df_results = process_student_data(dummy_data)
+    
+    print("=== 學生作品縱向發展分析報告 ===")
+    print(df_results.to_markdown(index=False))
+
+
+
+程式運作原理解析（對應您的研究方法）
+
+
+
+
+網頁/資訊作品複雜度尺規 (1-4分)：
+
+
+程式中的 analyze_web_complexity 函數透過掃描 HTML 標籤來實現。
+
+
+媒體豐富度： 檢查是否有 <img> (得2分)，是否有 <canvas> 或 <video> (得3分)，是否掛載了進階腳本如 antigravity, three.js (得4分)。
+
+
+排版架構： 檢查是否有 <div>, <h1> 等排版標籤 (得2分)，是否有 <nav> 導覽列 (得3分)，是否有 fetch, api 等動態串接語法 (得4分)。
+
+
+
+
+
+
+文本分析 (Text Analytics)：
+
+
+程式中的 analyze_text_density 函數負責過濾掉 HTML 標籤，萃取純文字。
+
+
+計算總字數。
+
+
+專有名詞密度： 透過建立 EARTH_SCIENCE_DICT (字典)，比對文本中出現的次數，並標準化為「每千字出現次數」。您可以把您課程的核心關鍵字全部加進這個陣列中。
+
+
+
+
+
+
+反思層次 (AI 輔助評量)：
+
+
+程式中的 analyze_reflection_level 函數利用 Prompt Engineering 呼叫 Gemini AI。
+
+
+讓 AI 扮演評量專家，閱讀學生的文本，並直接給出「批判性思考 / 描述性文字」的百分比。這完美實現了您提出的「描述性文字佔比 vs. 批判性思考文字佔比」量化指標。
+
+
+
+
+
+
+
+
+如何將這個程式應用在您的研究中？
+
+
+在學期結束後，您可以把所有學生佈署在 GitHub Pages 或 HuggingFace 上的 index.html 檔案下載下來，寫一個迴圈讓程式自動讀取這幾十份檔案。程式跑完後輸出的 Excel/CSV 表格，就是您可以直接放入 ASET 研討會論文中的量化原始數據！這將讓評審看到您不僅是「觀察」學生進步，而是具備嚴謹的資訊實證能力。
+
