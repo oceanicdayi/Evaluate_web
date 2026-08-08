@@ -12,6 +12,7 @@
   python analyze_web.py https://oceanicdayi.github.io/Utaipei_2026_summer/
   python analyze_web.py page.html --student S001 --semester Summer2026
   python analyze_web.py urls.txt --csv results.csv
+  python analyze_web.py --index https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/
 
 若設定環境變數 GEMINI_API_KEY，會以 Gemini 評估反思層次；
 否則改用關鍵詞啟發式估計（結果欄位會標示方法）。
@@ -26,11 +27,13 @@ import re
 import sys
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+
+USER_AGENT = "UTaipei-WebArtifactAnalyzer/1.0 (+research; digital-artifact-analysis)"
 
 # ==========================================
 # 1. 初始化與設定
@@ -86,22 +89,169 @@ def configure_gemini() -> Any | None:
 # 2. 核心分析函數
 # ==========================================
 
+def resolve_huggingface_host(url: str, timeout: int = 20) -> str | None:
+    """
+    huggingface.co/spaces/{user}/{repo} 的 hub 頁幾乎沒有作品本文。
+    透過 Spaces API 取得實際部署 host（*.hf.space / *.static.hf.space）。
+    """
+    m = re.match(
+        r"https?://huggingface\.co/spaces/([^/\s]+)/([^/\s?#]+)",
+        url,
+        flags=re.I,
+    )
+    if not m:
+        return None
+    user, repo = m.group(1), m.group(2)
+    api = f"https://huggingface.co/api/spaces/{user}/{repo}"
+    try:
+        resp = requests.get(api, timeout=timeout, headers={"User-Agent": USER_AGENT})
+        resp.raise_for_status()
+        data = resp.json()
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] HF API 失敗 {user}/{repo}: {exc}", file=sys.stderr)
+        return None
+
+    host = data.get("host")
+    if host:
+        return host.rstrip("/") + "/"
+
+    runtime = data.get("runtime") or {}
+    domains = runtime.get("domains") or []
+    for item in domains:
+        domain = item.get("domain") if isinstance(item, dict) else None
+        if domain:
+            return f"https://{domain}/"
+    return None
+
+
+def resolve_fetch_url(source: str) -> tuple[str, str]:
+    """
+    回傳 (實際抓取 URL, 解析備註)。
+    Hugging Face Space hub 頁會自動改抓部署 host。
+    """
+    if "huggingface.co/spaces/" in source.lower():
+        host = resolve_huggingface_host(source)
+        if host:
+            return host, f"hf_host:{host}"
+        return source, "hf_hub_fallback"
+    return source, "direct"
+
+
+def decode_response_text(resp: requests.Response) -> str:
+    """優先使用標頭 charset / UTF-8，避免中文頁被誤判編碼。"""
+    content_type = resp.headers.get("Content-Type", "")
+    m = re.search(r"charset=([\w-]+)", content_type, flags=re.I)
+    if m:
+        resp.encoding = m.group(1)
+    elif not resp.encoding or resp.encoding.lower() in {"iso-8859-1", "ascii"}:
+        # requests 對無 charset 常預設 ISO-8859-1；改以內容推斷
+        resp.encoding = resp.apparent_encoding or "utf-8"
+    # 若仍明顯亂碼且 bytes 可 UTF-8 解碼，改用 UTF-8
+    text = resp.text
+    if "å" in text[:2000] and "地" not in text[:2000]:
+        try:
+            text = resp.content.decode("utf-8")
+        except UnicodeDecodeError:
+            pass
+    return text
+
+
 def load_html(source: str, timeout: int = 30) -> str:
     """從 URL 或本機檔案讀取 HTML。"""
     parsed = urlparse(source)
     if parsed.scheme in {"http", "https"}:
+        fetch_url, note = resolve_fetch_url(source)
+        if note.startswith("hf_host:"):
+            print(f"[info] HF Space 改抓部署頁: {fetch_url}", file=sys.stderr)
         resp = requests.get(
-            source,
+            fetch_url,
             timeout=timeout,
-            headers={"User-Agent": "UTaipei-WebArtifactAnalyzer/1.0"},
+            headers={"User-Agent": USER_AGENT},
         )
         resp.raise_for_status()
-        resp.encoding = resp.apparent_encoding or "utf-8"
-        return resp.text
+        return decode_response_text(resp)
     path = Path(source)
     if not path.exists():
         raise FileNotFoundError(f"找不到檔案: {source}")
     return path.read_text(encoding="utf-8")
+
+
+def parse_final_report_index(index_url: str, timeout: int = 30) -> list[dict[str, Any]]:
+    """
+    解析期末報告彙整頁（article.station），抽出每位學生的網頁作品連結。
+    僅分析 GitHub Pages / Hugging Face 等網頁成果；PDF/IMG 附件另列計數。
+    """
+    resp = requests.get(index_url, timeout=timeout, headers={"User-Agent": USER_AGENT})
+    resp.raise_for_status()
+    html = decode_response_text(resp)
+    soup = BeautifulSoup(html, "html.parser")
+    records: list[dict[str, Any]] = []
+
+    articles = soup.select("article.station")
+    if not articles:
+        # 後備：抓所有外部 http(s) 連結（排除本站 PDF/附件）
+        print("[warn] 找不到 article.station，改抓頁面外連。", file=sys.stderr)
+        seen: set[str] = set()
+        for a in soup.find_all("a", href=True):
+            href = a["href"].strip()
+            absu = urljoin(index_url, href)
+            if not absu.startswith("http"):
+                continue
+            if urlparse(absu).netloc == urlparse(index_url).netloc:
+                continue
+            if absu in seen:
+                continue
+            seen.add(absu)
+            records.append(
+                {
+                    "student_id": f"LINK{len(records)+1:02d}",
+                    "name": a.get_text(" ", strip=True)[:40],
+                    "semester": "Seismology_2026_final",
+                    "platform": "",
+                    "source": absu,
+                    "attachment_count": 0,
+                }
+            )
+        return records
+
+    for art in articles:
+        sid_el = art.select_one(".code")
+        name_el = art.select_one("h2")
+        sid = sid_el.get_text(strip=True) if sid_el else art.get("id", "unknown")
+        name = name_el.get_text(strip=True) if name_el else ""
+        attach_n = len(art.select(".attach a"))
+        web_links = art.select("a.rlink")
+        if not web_links:
+            records.append(
+                {
+                    "student_id": sid,
+                    "name": name,
+                    "semester": "Seismology_2026_final",
+                    "platform": "(無網頁連結)",
+                    "source": "",
+                    "attachment_count": attach_n,
+                    "html_content": "",
+                    "error": "no_web_link",
+                }
+            )
+            continue
+        for a in web_links:
+            platform = ""
+            tag = a.select_one(".ltag")
+            if tag:
+                platform = tag.get_text(strip=True)
+            url = a.get("href", "").strip()
+            records.append(
+                {
+                    "student_id": sid,
+                    "name": name,
+                    "semester": "Seismology_2026_final",
+                    "platform": platform,
+                    "source": url,
+                    "attachment_count": attach_n,
+                }
+            )
+    return records
 
 
 def analyze_web_complexity(html_content: str) -> tuple[int, int, dict[str, Any]]:
@@ -261,15 +411,48 @@ def analyze_record(
     html_content: str,
     source: str = "",
     model: Any | None = None,
+    name: str = "",
+    platform: str = "",
+    attachment_count: int = 0,
+    error: str = "",
 ) -> dict[str, Any]:
+    if error or not html_content:
+        return {
+            "學號": student_id,
+            "姓名": name,
+            "學期": semester,
+            "平台": platform,
+            "來源": source,
+            "附件數": attachment_count,
+            "狀態": error or "empty_html",
+            "媒體豐富度(1-4)": None,
+            "排版架構(1-4)": None,
+            "總字數": 0,
+            "專有名詞出現次數": 0,
+            "專有名詞密度(次/千字)": 0.0,
+            "批判思考佔比(%)": 0.0,
+            "反思評量方法": "skipped",
+            "img數": 0,
+            "互動元件數": 0,
+            "互動標籤": "",
+            "進階腳本": False,
+            "動態API": False,
+            "命中專有名詞": "",
+            "文本預覽": "",
+        }
+
     media, layout, details = analyze_web_complexity(html_content)
     word_count, density, term_count, pure_text, term_hits = analyze_text_density(html_content)
     critical_ratio, method = analyze_reflection_level(pure_text, model=model)
 
     return {
         "學號": student_id,
+        "姓名": name,
         "學期": semester,
+        "平台": platform,
         "來源": source,
+        "附件數": attachment_count,
+        "狀態": "ok",
         "媒體豐富度(1-4)": media,
         "排版架構(1-4)": layout,
         "總字數": word_count,
@@ -292,17 +475,28 @@ def process_student_data(student_records: list[dict[str, Any]], model: Any | Non
     for record in student_records:
         html = record.get("html_content")
         source = record.get("source") or record.get("url") or ""
-        if html is None and source:
-            html = load_html(source)
-        if html is None:
-            raise ValueError(f"缺少 html_content 或 source: {record}")
+        error = record.get("error", "")
+        if html is None and source and not error:
+            try:
+                html = load_html(source)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[error] 無法讀取 {source}: {exc}", file=sys.stderr)
+                error = f"fetch_error:{exc}"
+                html = ""
+        if html is None and not error:
+            error = "missing_html"
+            html = ""
         results.append(
             analyze_record(
                 student_id=record.get("student_id", "unknown"),
                 semester=record.get("semester", ""),
-                html_content=html,
+                html_content=html or "",
                 source=source,
                 model=model,
+                name=record.get("name", ""),
+                platform=record.get("platform", ""),
+                attachment_count=int(record.get("attachment_count") or 0),
+                error=error,
             )
         )
     return pd.DataFrame(results)
@@ -318,13 +512,14 @@ def print_report(df: pd.DataFrame) -> None:
     print("=== 學生作品縱向發展分析報告 ===")
     cols = [
         "學號",
-        "學期",
+        "姓名",
+        "平台",
         "媒體豐富度(1-4)",
         "排版架構(1-4)",
         "總字數",
         "專有名詞密度(次/千字)",
         "批判思考佔比(%)",
-        "反思評量方法",
+        "狀態",
     ]
     show = df[[c for c in cols if c in df.columns]]
     try:
@@ -332,11 +527,41 @@ def print_report(df: pd.DataFrame) -> None:
     except Exception:  # noqa: BLE001
         print(show.to_string(index=False))
 
+    ok = df[df["狀態"] == "ok"] if "狀態" in df.columns else df
+    if not ok.empty and "媒體豐富度(1-4)" in ok.columns:
+        print()
+        print("=== 班級摘要（僅成功抓取的網頁作品）===")
+        print(f"作品數: {len(ok)}")
+        print(
+            "平均｜媒體={:.2f} 排版={:.2f} 字數={:.0f} 密度={:.2f} 批判%={:.1f}".format(
+                ok["媒體豐富度(1-4)"].mean(),
+                ok["排版架構(1-4)"].mean(),
+                ok["總字數"].mean(),
+                ok["專有名詞密度(次/千字)"].mean(),
+                ok["批判思考佔比(%)"].mean(),
+            )
+        )
+        print(
+            "媒體分數分布:",
+            ok["媒體豐富度(1-4)"].value_counts().sort_index().to_dict(),
+        )
+        print(
+            "排版分數分布:",
+            ok["排版架構(1-4)"].value_counts().sort_index().to_dict(),
+        )
+
     print()
     for _, row in df.iterrows():
-        print(f"--- 詳情：{row.get('學號')} / {row.get('學期')} ---")
+        label = f"{row.get('學號')} {row.get('姓名', '')}".strip()
+        print(f"--- 詳情：{label} / {row.get('學期')} ---")
+        if row.get("平台"):
+            print(f"平台: {row['平台']}")
         if row.get("來源"):
             print(f"來源: {row['來源']}")
+        if row.get("狀態") and row["狀態"] != "ok":
+            print(f"狀態: {row['狀態']}")
+            print()
+            continue
         print(score_labels(int(row["媒體豐富度(1-4)"]), int(row["排版架構(1-4)"])))
         print(
             f"字數={row['總字數']} | 專有名詞={row.get('專有名詞出現次數', '?')} 次"
@@ -392,6 +617,14 @@ def parse_sources(args: argparse.Namespace) -> list[dict[str, Any]]:
     if args.demo:
         return build_demo_records()
 
+    if args.index:
+        print(f"[info] 解析期末報告彙整頁: {args.index}", file=sys.stderr)
+        records = parse_final_report_index(args.index)
+        if args.semester:
+            for rec in records:
+                rec["semester"] = args.semester
+        return records
+
     sources = list(args.sources)
     if len(sources) == 1 and sources[0].endswith(".txt") and Path(sources[0]).is_file():
         lines = Path(sources[0]).read_text(encoding="utf-8").splitlines()
@@ -412,6 +645,11 @@ def parse_sources(args: argparse.Namespace) -> list[dict[str, Any]]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="數位作品縱向分析系統")
     parser.add_argument("sources", nargs="*", help="HTML 檔案、URL，或含清單的 .txt")
+    parser.add_argument(
+        "--index",
+        default="",
+        help="期末報告彙整頁 URL（自動抓每位學生的 GitHub/HF 作品連結）",
+    )
     parser.add_argument("--student", default="", help="學號／作品代碼")
     parser.add_argument("--semester", default="", help="學期標籤")
     parser.add_argument("--csv", default="", help="輸出 CSV 路徑")
@@ -419,10 +657,14 @@ def main() -> int:
     parser.add_argument("--demo", action="store_true", help="執行 Program 內建示範資料")
     args = parser.parse_args()
 
-    if not args.sources and not args.demo:
+    if not args.sources and not args.demo and not args.index:
         parser.print_help()
         print("\n範例：")
         print("  python analyze_web.py https://oceanicdayi.github.io/Utaipei_2026_summer/")
+        print(
+            "  python analyze_web.py --index "
+            "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/"
+        )
         print("  python analyze_web.py --demo")
         return 2
 
@@ -431,11 +673,22 @@ def main() -> int:
         print("[info] 未設定 GEMINI_API_KEY，反思層次改用啟發式估計。", file=sys.stderr)
 
     records = parse_sources(args)
-    # 預先載入 HTML，讓錯誤訊息清楚
+    # 預先載入 HTML（index 模式已含 error/no_web_link 紀錄）
     for rec in records:
-        if "html_content" not in rec:
-            print(f"[info] 讀取: {rec['source']}", file=sys.stderr)
-            rec["html_content"] = load_html(rec["source"])
+        if "html_content" in rec or rec.get("error"):
+            continue
+        src = rec.get("source") or ""
+        if not src:
+            rec["error"] = "no_web_link"
+            rec["html_content"] = ""
+            continue
+        print(f"[info] 讀取: {rec.get('student_id','')} {src}", file=sys.stderr)
+        try:
+            rec["html_content"] = load_html(src)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[error] 無法讀取 {src}: {exc}", file=sys.stderr)
+            rec["error"] = f"fetch_error:{exc}"
+            rec["html_content"] = ""
 
     df = process_student_data(records, model=model)
     print_report(df)
