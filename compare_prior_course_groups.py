@@ -19,10 +19,8 @@ METRICS = {
 
 PRIOR_GROUP = "上學期作品名單內"
 NEW_GROUP = "未見於上學期作品名單"
-GEO_URL = (
-    "https://oceanicdayi.github.io/2025_Geophysics_Final_Report/student_works.html"
-)
-SEIS_URL = "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/"
+GEO_URL = "上學期原始作品集合（連結因去識別化移除）"
+SEIS_URL = "下學期原始作品集合（連結因去識別化移除）"
 
 
 def assign_groups(geo_csv: str, seis_csv: str) -> pd.DataFrame:

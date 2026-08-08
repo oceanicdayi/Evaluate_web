@@ -43,8 +43,7 @@ def main() -> int:
         "geophysics": records(
             "results_geophysics_2025_final.csv",
             [
-                "學號",
-                "姓名",
+                "匿名代碼",
                 "平台",
                 "媒體豐富度(1-4)",
                 "排版架構(1-4)",
@@ -57,8 +56,7 @@ def main() -> int:
         "seismology": records(
             "results_seismology_2026_final_primary.csv",
             [
-                "學號",
-                "姓名",
+                "匿名代碼",
                 "平台",
                 "媒體豐富度(1-4)",
                 "排版架構(1-4)",
@@ -71,8 +69,7 @@ def main() -> int:
         "assignment": records(
             "seismology_2026_hw2_prior_advantage_evidence.csv",
             [
-                "學號",
-                "姓名",
+                "匿名代碼",
                 "組別",
                 "媒體豐富度(1-4)",
                 "排版架構(1-4)",
@@ -86,8 +83,7 @@ def main() -> int:
         "longitudinal": records(
             "longitudinal_comparison_2025_2026.csv",
             [
-                "學號",
-                "姓名",
+                "匿名代碼",
                 "比較信度",
                 "媒體_變化",
                 "排版_變化",
@@ -506,19 +502,19 @@ def main() -> int:
         </div>
         <div class="grid grid-2">
           <article class="card case">
-            <div class="case-top"><div class="term">Geophysics · Upper semester</div><h3>闕嘉潁｜地球物理期末專題</h3><p>五項指標綜合百分等級最高：83.08</p></div>
+            <div class="case-top"><div class="term">Geophysics · Upper semester</div><h3>匿名案例 G-01｜地球物理期末專題</h3><p>五項指標綜合百分等級最高：83.08</p></div>
             <div class="case-body">
               <div class="chips"><span class="chip">互動震測折射</span><span class="chip">PyGMT</span><span class="chip">非洲板塊</span><span class="chip">層析成像</span><span class="chip">火山監測</span><span class="chip">機器學習</span></div>
               <p>把物理公式轉成可調參數的走時模型，把板塊概念轉成程式地圖，再以專家講座連結研究方法與防災。</p>
-              <a href="https://u11310033-collab.github.io/final_tern/index.html">開啟原作品 ↗</a>
+              <span class="metric-detail">原始作品連結已依研究倫理移除</span>
             </div>
           </article>
           <article class="card case">
-            <div class="case-top"><div class="term">Seismology · Lower semester</div><h3>蕭筠安｜地震學整合平台</h3><p>八單元、13,091 字的課程全景</p></div>
+            <div class="case-top"><div class="term">Seismology · Lower semester</div><h3>匿名案例 S-01｜地震學整合平台</h3><p>八單元、13,091 字的課程全景</p></div>
             <div class="case-body">
               <div class="chips"><span class="chip">走時分析</span><span class="chip">FFT／STFT</span><span class="chip">震源機制</span><span class="chip">Raspberry Pi</span><span class="chip">野外佈站</span><span class="chip">工程補強</span></div>
               <p>從波動與射線理論，進展到訊號處理、感測器、野外地震儀、工程參訪，最後反思 AI 與專業判斷。</p>
-              <a href="https://hsiaoyunan36-seismologyterm-framework.static.hf.space">開啟原作品 ↗</a>
+              <span class="metric-detail">原始作品連結已依研究倫理移除</span>
             </div>
           </article>
         </div>
@@ -539,7 +535,7 @@ def main() -> int:
             <button class="table-btn" data-table="assignment">第一個網頁作業</button>
             <button class="table-btn" data-table="longitudinal">縱向配對</button>
           </div>
-          <input id="table-search" class="search" type="search" placeholder="搜尋學號、姓名或組別" aria-label="搜尋資料表">
+          <input id="table-search" class="search" type="search" placeholder="搜尋匿名代碼或組別" aria-label="搜尋資料表">
         </div>
         <div class="data-wrap"><table class="data-table"><thead id="data-head"></thead><tbody id="data-body"></tbody></table></div>
 
@@ -558,10 +554,11 @@ def main() -> int:
           <a class="download" href="figure2_text_analytics_trajectory.svg"><strong>圖二：文本指標位移</strong><small>SVG · 配對散布圖</small></a>
           <a class="download" href="figure1_web_complexity_distribution.png"><strong>圖一 PNG</strong><small>2800×1520 · 高解析點陣圖</small></a>
           <a class="download" href="figure2_text_analytics_trajectory.png"><strong>圖二 PNG</strong><small>2800×1680 · 高解析點陣圖</small></a>
+          <a class="download" href="PRIVACY.md"><strong>資料去識別化說明</strong><small>匿名化措施與 Git 歷史注意事項</small></a>
         </div>
 
         <div class="caution" style="margin-top:46px">
-          <strong>方法限制：</strong>「修過上學期」以是否出現在上學期作品名單作代理，並非正式選課紀錄；媒體與排版為序位尺規；批判思考為關鍵詞啟發式；主題涵蓋只判定概念是否出現，不判斷正確性。所有結果適合描述趨勢，不應直接解讀為因果效果或學科成績。
+          <strong>方法與隱私限制：</strong>「修過上學期」以是否出現在上學期作品名單作代理，並非正式選課紀錄；媒體與排版為序位尺規；批判思考為關鍵詞啟發式；主題涵蓋只判定概念是否出現，不判斷正確性。學生資料已改用一次性匿名代碼，原始作品連結與文本預覽均已移除。所有結果適合描述趨勢，不應直接解讀為因果效果或學科成績。
         </div>
       </div>
     </section>

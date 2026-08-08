@@ -16,12 +16,8 @@ METRICS = {
     "批判思考佔比(%)": "批判思考",
 }
 
-DEFAULT_GEO_URL = (
-    "https://oceanicdayi.github.io/2025_Geophysics_Final_Report/student_works.html"
-)
-DEFAULT_SEIS_URL = (
-    "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/"
-)
+DEFAULT_GEO_URL = "上學期原始作品集合（連結因去識別化移除）"
+DEFAULT_SEIS_URL = "下學期原始作品集合（連結因去識別化移除）"
 
 
 def load_and_match(geophysics_csv: str, seismology_csv: str) -> pd.DataFrame:
