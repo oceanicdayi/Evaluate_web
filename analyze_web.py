@@ -176,10 +176,139 @@ def load_html(source: str, timeout: int = 30) -> str:
     return path.read_text(encoding="utf-8")
 
 
+def _js_object_array_to_json(js_array: str) -> list[dict[str, Any]]:
+    """把簡易 JS object array（const students = [...]）轉成 Python list。"""
+    js2 = re.sub(r"([{\[,]\s*)([A-Za-z_][A-Za-z0-9_]*)\s*:", r'\1"\2":', js_array)
+    js2 = re.sub(r",\s*([}\]])", r"\1", js2)
+    return json.loads(js2)
+
+
+def classify_work_link(url: str, label: str = "") -> tuple[bool, str]:
+    """
+    判斷是否為應納入尺規分析的「網頁作品」。
+    回傳 (是否分析, 平台標籤)。
+    """
+    u = url.lower()
+    label_l = label.lower()
+    if any(x in u for x in [".github.io", "hf.space", "huggingface.co/spaces"]):
+        if "huggingface.co/spaces" in u or "hf.space" in u:
+            return True, "Hugging Face Space"
+        return True, "GitHub Pages"
+    if "streamlit.app" in u:
+        return True, "Streamlit"
+    if "gemini.google.com/share" in u:
+        return True, "Gemini"
+    # 明顯非作品網頁本體
+    skip_hosts = (
+        "github.com/",
+        "github.dev/",
+        "colab.research.google.com",
+        "eeclass.utaipei.edu.tw",
+        ".m4a",
+        ".pdf",
+        ".png",
+        ".jpg",
+        ".jpeg",
+    )
+    if any(x in u for x in skip_hosts):
+        return False, label or "attachment"
+    if "作品" in label or "website" in label_l or "report" in label_l:
+        return True, label or "Web"
+    return False, label or "other"
+
+
+def parse_geophysics_students_js(html: str, semester: str) -> list[dict[str, Any]] | None:
+    """解析地球物理展示頁內嵌的 const students = [...] mid。"""
+    m = re.search(r"const\s+students\s*=\s*(\[\s*{.*?}\s*\])\s*;", html, flags=re.S)
+    if not m:
+        return None
+    try:
+        students = _js_object_array_to_json(m.group(1))
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] 無法解析 students JS 陣列: {exc}", file=sys.stderr)
+        return None
+
+    records: list[dict[str, Any]] = []
+    for s in students:
+        sid = str(s.get("studentId") or s.get("id") or "unknown").upper()
+        name = s.get("name") or ""
+        links = s.get("links") or []
+        extras = [
+            lk
+            for lk in links
+            if not classify_work_link(lk.get("url", ""), lk.get("label", ""))[0]
+        ]
+        work_links = []
+        for lk in links:
+            url = (lk.get("url") or "").strip()
+            label = lk.get("label") or ""
+            ok, platform = classify_work_link(url, label)
+            if ok:
+                work_links.append((url, platform, label))
+
+        # 每位學生優先分析 GitHub Pages / Streamlit / HF；Gemini 僅在沒有其他作品時納入
+        preferred = [w for w in work_links if w[1] != "Gemini"]
+        chosen = preferred if preferred else work_links
+
+        # 同網域多頁時保留主站（標籤含「作品」者優先，否則第一筆）
+        if chosen:
+            mains = [w for w in chosen if "作品" in w[2] or w[1] in {"Streamlit", "Hugging Face Space"}]
+            if mains:
+                # 仍保留所有 github.io 主站與 streamlit；略過同站 detail 子頁避免重複
+                dedup: list[tuple[str, str, str]] = []
+                seen_netloc_path: set[str] = set()
+                ordered = mains + [w for w in chosen if w not in mains]
+                for url, platform, label in ordered:
+                    parsed = urlparse(url)
+                    key = f"{parsed.netloc}{parsed.path}"
+                    # detail.html / 週次子頁：若已有同站主頁則略過
+                    if "detail.html" in parsed.path and any(
+                        urlparse(u).netloc == parsed.netloc for u, _, _ in dedup
+                    ):
+                        continue
+                    if key in seen_netloc_path:
+                        continue
+                    seen_netloc_path.add(key)
+                    dedup.append((url, platform, label))
+                chosen = dedup
+
+        if not chosen:
+            records.append(
+                {
+                    "student_id": sid,
+                    "name": name,
+                    "semester": semester,
+                    "platform": "(無可分析網頁)",
+                    "source": "",
+                    "attachment_count": len(extras),
+                    "html_content": "",
+                    "error": "no_web_link",
+                }
+            )
+            continue
+
+        for url, platform, _label in chosen:
+            records.append(
+                {
+                    "student_id": sid,
+                    "name": name,
+                    "semester": semester,
+                    "platform": platform,
+                    "source": url,
+                    "attachment_count": len(extras),
+                }
+            )
+    return records
+
+
 def parse_final_report_index(index_url: str, timeout: int = 30) -> list[dict[str, Any]]:
     """
-    解析期末報告彙整頁（article.station），抽出每位學生的網頁作品連結。
-    僅分析 GitHub Pages / Hugging Face 等網頁成果；PDF/IMG 附件另列計數。
+    解析期末報告彙整頁，抽出每位學生的網頁作品連結。
+
+    支援：
+    1. 地震學彙整頁：article.station + a.rlink
+    2. 地球物理展示頁：const students = [...]（JS 內嵌資料）
+    3. 後備：頁面外部 http(s) 連結
     """
     resp = requests.get(index_url, timeout=timeout, headers={"User-Agent": USER_AGENT})
     resp.raise_for_status()
@@ -187,70 +316,88 @@ def parse_final_report_index(index_url: str, timeout: int = 30) -> list[dict[str
     soup = BeautifulSoup(html, "html.parser")
     records: list[dict[str, Any]] = []
 
+    # 依 URL 粗分學期標籤
+    if "Geophysics" in index_url or "geophysic" in index_url.lower():
+        semester = "Geophysics_2025_final"
+    elif "Seismology" in index_url:
+        semester = "Seismology_2026_final"
+    else:
+        semester = "final_report"
+
+    # 1) 地球物理：JS students 陣列
+    geo = parse_geophysics_students_js(html, semester=semester)
+    if geo is not None:
+        print(f"[info] 以 JS students 陣列解析，共 {len(geo)} 筆作品連結", file=sys.stderr)
+        return geo
+
+    # 2) 地震學：article.station
     articles = soup.select("article.station")
-    if not articles:
-        # 後備：抓所有外部 http(s) 連結（排除本站 PDF/附件）
-        print("[warn] 找不到 article.station，改抓頁面外連。", file=sys.stderr)
-        seen: set[str] = set()
-        for a in soup.find_all("a", href=True):
-            href = a["href"].strip()
-            absu = urljoin(index_url, href)
-            if not absu.startswith("http"):
+    if articles:
+        for art in articles:
+            sid_el = art.select_one(".code")
+            name_el = art.select_one("h2")
+            sid = sid_el.get_text(strip=True) if sid_el else art.get("id", "unknown")
+            name = name_el.get_text(strip=True) if name_el else ""
+            attach_n = len(art.select(".attach a"))
+            web_links = art.select("a.rlink")
+            if not web_links:
+                records.append(
+                    {
+                        "student_id": sid,
+                        "name": name,
+                        "semester": semester,
+                        "platform": "(無網頁連結)",
+                        "source": "",
+                        "attachment_count": attach_n,
+                        "html_content": "",
+                        "error": "no_web_link",
+                    }
+                )
                 continue
-            if urlparse(absu).netloc == urlparse(index_url).netloc:
-                continue
-            if absu in seen:
-                continue
-            seen.add(absu)
-            records.append(
-                {
-                    "student_id": f"LINK{len(records)+1:02d}",
-                    "name": a.get_text(" ", strip=True)[:40],
-                    "semester": "Seismology_2026_final",
-                    "platform": "",
-                    "source": absu,
-                    "attachment_count": 0,
-                }
-            )
+            for a in web_links:
+                platform = ""
+                tag = a.select_one(".ltag")
+                if tag:
+                    platform = tag.get_text(strip=True)
+                url = a.get("href", "").strip()
+                records.append(
+                    {
+                        "student_id": sid,
+                        "name": name,
+                        "semester": semester,
+                        "platform": platform,
+                        "source": url,
+                        "attachment_count": attach_n,
+                    }
+                )
         return records
 
-    for art in articles:
-        sid_el = art.select_one(".code")
-        name_el = art.select_one("h2")
-        sid = sid_el.get_text(strip=True) if sid_el else art.get("id", "unknown")
-        name = name_el.get_text(strip=True) if name_el else ""
-        attach_n = len(art.select(".attach a"))
-        web_links = art.select("a.rlink")
-        if not web_links:
-            records.append(
-                {
-                    "student_id": sid,
-                    "name": name,
-                    "semester": "Seismology_2026_final",
-                    "platform": "(無網頁連結)",
-                    "source": "",
-                    "attachment_count": attach_n,
-                    "html_content": "",
-                    "error": "no_web_link",
-                }
-            )
+    # 3) 後備：抓所有外部 http(s) 連結（排除本站 PDF/附件）
+    print("[warn] 找不到已知彙整結構，改抓頁面外連。", file=sys.stderr)
+    seen: set[str] = set()
+    for a in soup.find_all("a", href=True):
+        href = a["href"].strip()
+        absu = urljoin(index_url, href)
+        if not absu.startswith("http"):
             continue
-        for a in web_links:
-            platform = ""
-            tag = a.select_one(".ltag")
-            if tag:
-                platform = tag.get_text(strip=True)
-            url = a.get("href", "").strip()
-            records.append(
-                {
-                    "student_id": sid,
-                    "name": name,
-                    "semester": "Seismology_2026_final",
-                    "platform": platform,
-                    "source": url,
-                    "attachment_count": attach_n,
-                }
-            )
+        if urlparse(absu).netloc == urlparse(index_url).netloc:
+            continue
+        ok, platform = classify_work_link(absu, a.get_text(" ", strip=True))
+        if not ok:
+            continue
+        if absu in seen:
+            continue
+        seen.add(absu)
+        records.append(
+            {
+                "student_id": f"LINK{len(records)+1:02d}",
+                "name": a.get_text(" ", strip=True)[:40],
+                "semester": semester,
+                "platform": platform,
+                "source": absu,
+                "attachment_count": 0,
+            }
+        )
     return records
 
 
