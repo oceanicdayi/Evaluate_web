@@ -6,6 +6,7 @@ from __future__ import annotations
 import html
 from pathlib import Path
 
+import cairosvg
 import pandas as pd
 
 ROOT = Path(__file__).parent
@@ -195,14 +196,30 @@ def figure2(data: pd.DataFrame) -> str:
 
 def main() -> int:
     data = pd.read_csv(DATA)
+    figure1_svg = figure1(data)
+    figure2_svg = figure2(data)
     (ROOT / "figure1_web_complexity_distribution.svg").write_text(
-        figure1(data), encoding="utf-8"
+        figure1_svg, encoding="utf-8"
     )
     (ROOT / "figure2_text_analytics_trajectory.svg").write_text(
-        figure2(data), encoding="utf-8"
+        figure2_svg, encoding="utf-8"
+    )
+    cairosvg.svg2png(
+        bytestring=figure1_svg.encode("utf-8"),
+        write_to=str(ROOT / "figure1_web_complexity_distribution.png"),
+        output_width=2800,
+        output_height=1520,
+    )
+    cairosvg.svg2png(
+        bytestring=figure2_svg.encode("utf-8"),
+        write_to=str(ROOT / "figure2_text_analytics_trajectory.png"),
+        output_width=2800,
+        output_height=1680,
     )
     print("[saved] figure1_web_complexity_distribution.svg")
+    print("[saved] figure1_web_complexity_distribution.png (2800×1520)")
     print("[saved] figure2_text_analytics_trajectory.svg")
+    print("[saved] figure2_text_analytics_trajectory.png (2800×1680)")
     return 0
 
 
