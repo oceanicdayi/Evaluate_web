@@ -19,7 +19,7 @@ PAPER = "#fbf8ef"
 UPPER = "#e66f5b"
 LOWER = "#159e94"
 GOLD = "#d7aa4b"
-FONT = "system-ui,-apple-system,'Segoe UI','Noto Sans TC',sans-serif"
+FONT = "'Noto Sans CJK TC','Noto Sans TC','WenQuanYi Micro Hei',sans-serif"
 
 
 def esc(value) -> str:
