@@ -38,6 +38,12 @@ def main() -> int:
         "representatives": (
             ROOT / "representative_final_reports_course_summary.md"
         ).read_text(encoding="utf-8"),
+        "methods": (ROOT / "metric_calculation_method.md").read_text(
+            encoding="utf-8"
+        ),
+        "stage_changes": (
+            ROOT / "seismology_2026_hw2_to_final_comparison.md"
+        ).read_text(encoding="utf-8"),
     }
     tables = {
         "geophysics": records(
@@ -85,6 +91,18 @@ def main() -> int:
             [
                 "匿名代碼",
                 "比較信度",
+                "媒體_變化",
+                "排版_變化",
+                "字數_變化",
+                "術語密度_變化",
+                "批判思考_變化",
+            ],
+        ),
+        "stage_changes": records(
+            "seismology_2026_hw2_to_final_changes.csv",
+            [
+                "匿名代碼",
+                "組別",
                 "媒體_變化",
                 "排版_變化",
                 "字數_變化",
@@ -351,6 +369,7 @@ def main() -> int:
       <button class="tab" data-panel="groups" role="tab">期末組間比較</button>
       <button class="tab" data-panel="assignment" role="tab">第一個網頁作業</button>
       <button class="tab" data-panel="cases" role="tab">優良代表作品</button>
+      <button class="tab" data-panel="methods" role="tab">指標計算方式</button>
       <button class="tab" data-panel="data" role="tab">資料與下載</button>
     </div>
   </nav>
@@ -432,6 +451,10 @@ def main() -> int:
             <img src="figure2_text_analytics_trajectory.svg" alt="圖二：八位學生的專有名詞密度與批判思考比例跨學期散布及移動箭頭">
             <figcaption><strong>圖二　文本分析指標的跨學期位移。</strong>每支箭頭連接同一位學生的上下學期作品；金色虛線為班級平均。因未取得先備成績，本圖不作高低成就分群。</figcaption>
           </figure>
+          <figure class="figure-card">
+            <img src="figure3_longitudinal_individual_changes.svg" alt="圖三：八位匿名配對學生在五項指標上的跨學期個別變化矩陣">
+            <figcaption><strong>圖三　相同學生的跨學期個別變化。</strong>逐列呈現 8 位高信度配對學生；綠色代表指標增加，紅色代表減少，色彩深淺依各指標欄內的變化幅度標準化。</figcaption>
+          </figure>
         </div>
         <article class="report-shell"><div id="report-longitudinal" class="prose"></div></article>
       </div>
@@ -490,6 +513,30 @@ def main() -> int:
             </ol>
           </article>
         </div>
+        <div class="section-head" style="margin-top:72px">
+          <div><div class="kicker">Within-semester development</div><h2>第一個作業到期末，大家如何改變</h2></div>
+          <p class="section-note">限定同時有第一個網頁作業與期末報告的 18 位學生；兩次任務要求不同，因此呈現的是作品型態變化。</p>
+        </div>
+        <div class="grid grid-3">
+          <article class="card teal"><div class="metric-label">媒體豐富度</div><div class="metric-value">9 / 18</div><div class="metric-detail">9 人增加、6 人持平、3 人減少；平均 +0.39 分</div></article>
+          <article class="card dark"><div class="metric-label">批判思考訊號</div><div class="metric-value">12 / 18</div><div class="metric-detail">12 人增加；平均 +3.96 個百分點</div></article>
+          <article class="card"><div class="metric-label">排版架構</div><div class="metric-value">14 / 18</div><div class="metric-detail">14 人持平，整體平均變化為 0</div></article>
+        </div>
+        <div class="caution" style="margin-top:24px"><strong>篇幅變化需謹慎：</strong>期末比第一個作業平均少 595 個可見字元（13 人減少），但期末任務偏向成果整合，第一個作業則要求完整介紹課本章節；不能直接把篇幅縮短解讀為退步。</div>
+        <div class="figure-grid">
+          <figure class="figure-card">
+            <img src="figure4_hw2_to_final_change_matrix.svg" alt="圖四：18 位匿名學生從下學期第一個網頁作業到期末的五項個別變化矩陣">
+            <figcaption><strong>圖四　第一個網頁作業到期末的個別變化。</strong>顯示所有 18 位共同學生的媒體、排版、文本字元、術語密度與反思比例差值；左側標記先備組與新加入組。</figcaption>
+          </figure>
+          <figure class="figure-card">
+            <img src="figure5_hw2_to_final_group_trajectories.svg" alt="圖五：先備組與新加入組從第一個作業到期末的五項平均軌跡">
+            <figcaption><strong>圖五　兩組的平均軌跡。</strong>新加入組在媒體與反思訊號上的增幅較大，與期末時組間差距縮小的描述一致；不同任務間只作描述性比較。</figcaption>
+          </figure>
+        </div>
+        <article class="report-shell" style="margin-top:46px"><div id="report-stage-changes" class="prose"></div></article>
+        <div class="section-head" style="margin-top:72px">
+          <div><div class="kicker">Prior experience deep dive</div><h2>先備經驗的早期優勢</h2></div>
+        </div>
         <article class="report-shell" style="margin-top:46px"><div id="report-hw2" class="prose"></div></article>
       </div>
     </section>
@@ -522,6 +569,21 @@ def main() -> int:
       </div>
     </section>
 
+    <section id="methods" class="panel">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="kicker">Measurement methods</div><h2>每一個數字如何計算</h2></div>
+          <p class="section-note">從 HTML 擷取、1–4 分尺規、文字公式，到效果量與探索性檢定，完整公開計算定義。</p>
+        </div>
+        <div class="grid grid-3">
+          <article class="card teal"><div class="metric-label">術語密度</div><div class="metric-value">C / N × 1000</div><div class="metric-detail">專有名詞命中總次數 ÷ 可見文本字元數 × 1000</div></article>
+          <article class="card coral"><div class="metric-label">批判思考比例</div><div class="metric-value">K / S × 100%</div><div class="metric-detail">批判思考句數 ÷ 全部句數 × 100%</div></article>
+          <article class="card dark"><div class="metric-label">內容發展指數</div><div class="metric-value">(PR₁+PR₂+PR₃)/3</div><div class="metric-detail">篇幅、術語絕對數、主題涵蓋的百分等級平均</div></article>
+        </div>
+        <article class="report-shell" style="margin-top:46px"><div id="report-methods" class="prose"></div></article>
+      </div>
+    </section>
+
     <section id="data" class="panel">
       <div class="wrap">
         <div class="section-head">
@@ -534,6 +596,7 @@ def main() -> int:
             <button class="table-btn" data-table="seismology">地震學期末</button>
             <button class="table-btn" data-table="assignment">第一個網頁作業</button>
             <button class="table-btn" data-table="longitudinal">縱向配對</button>
+            <button class="table-btn" data-table="stage_changes">作業→期末變化</button>
           </div>
           <input id="table-search" class="search" type="search" placeholder="搜尋匿名代碼或組別" aria-label="搜尋資料表">
         </div>
@@ -546,6 +609,7 @@ def main() -> int:
           <a class="download" href="longitudinal_comparison_2025_2026.csv"><strong>縱向配對完整資料</strong><small>CSV</small></a>
           <a class="download" href="seismology_2026_prior_course_group_comparison.md"><strong>下學期期末組間比較</strong><small>Markdown · 13 vs 5</small></a>
           <a class="download" href="seismology_2026_hw2_prior_advantage_deep_dive.md"><strong>第一個作業深入研究</strong><small>Markdown · 14 vs 6</small></a>
+          <a class="download" href="seismology_2026_hw2_to_final_comparison.md"><strong>第一個作業至期末比較</strong><small>Markdown · 18 位共同學生</small></a>
           <a class="download" href="seismology_2026_hw2_prior_advantage_evidence.csv"><strong>第一個作業證據資料</strong><small>CSV · 主題涵蓋與內容指數</small></a>
           <a class="download" href="results_geophysics_2025_final.csv"><strong>地球物理期末結果</strong><small>CSV · 19 份</small></a>
           <a class="download" href="results_seismology_2026_final_primary.csv"><strong>地震學期末結果</strong><small>CSV · 18 份代表作</small></a>
@@ -554,6 +618,14 @@ def main() -> int:
           <a class="download" href="figure2_text_analytics_trajectory.svg"><strong>圖二：文本指標位移</strong><small>SVG · 配對散布圖</small></a>
           <a class="download" href="figure1_web_complexity_distribution.png"><strong>圖一 PNG</strong><small>2800×1520 · 高解析點陣圖</small></a>
           <a class="download" href="figure2_text_analytics_trajectory.png"><strong>圖二 PNG</strong><small>2800×1680 · 高解析點陣圖</small></a>
+          <a class="download" href="figure3_longitudinal_individual_changes.svg"><strong>圖三：跨學期個別變化</strong><small>SVG · 五指標矩陣</small></a>
+          <a class="download" href="figure3_longitudinal_individual_changes.png"><strong>圖三 PNG</strong><small>2800×1960 · 高解析點陣圖</small></a>
+          <a class="download" href="figure4_hw2_to_final_change_matrix.svg"><strong>圖四：作業至期末個別變化</strong><small>SVG · 18 位學生</small></a>
+          <a class="download" href="figure4_hw2_to_final_change_matrix.png"><strong>圖四 PNG</strong><small>2800×3080 · 高解析點陣圖</small></a>
+          <a class="download" href="figure5_hw2_to_final_group_trajectories.svg"><strong>圖五：組別平均軌跡</strong><small>SVG · 先備組與新加入組</small></a>
+          <a class="download" href="figure5_hw2_to_final_group_trajectories.png"><strong>圖五 PNG</strong><small>2800×1960 · 高解析點陣圖</small></a>
+          <a class="download" href="seismology_2026_hw2_to_final_changes.csv"><strong>作業至期末變化資料</strong><small>CSV · 18 位匿名學生</small></a>
+          <a class="download" href="metric_calculation_method.md"><strong>指標計算方式</strong><small>Markdown · 公式、尺規與限制</small></a>
           <a class="download" href="PRIVACY.md"><strong>資料去識別化說明</strong><small>匿名化措施與 Git 歷史注意事項</small></a>
         </div>
 
@@ -579,7 +651,9 @@ def main() -> int:
       longitudinal: "report-longitudinal",
       final_groups: "report-final-groups",
       hw2: "report-hw2",
-      representatives: "report-cases"
+      representatives: "report-cases",
+      methods: "report-methods",
+      stage_changes: "report-stage-changes"
     };
     Object.entries(reportTargets).forEach(([key, id]) => {
       const el = document.getElementById(id);
