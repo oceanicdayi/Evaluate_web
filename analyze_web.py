@@ -156,6 +156,100 @@ def decode_response_text(resp: requests.Response) -> str:
     return text
 
 
+def _plain_text_len(html_content: str) -> int:
+    soup = BeautifulSoup(html_content, "html.parser")
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+    return len(re.sub(r"\s+", " ", soup.get_text(" ", strip=True)).strip())
+
+
+def expand_sparse_html(base_url: str, html: str, timeout: int = 20, min_chars: int = 400) -> str:
+    """
+    若首頁純文字過短，嘗試：
+    1) 併入同網域內部 .html 子頁
+    2) 從大型 inline <script> 抽出中文／長字串（SPA／資料內嵌頁）
+    """
+    if _plain_text_len(html) >= min_chars:
+        return html
+
+    soup = BeautifulSoup(html, "html.parser")
+    chunks = [html]
+    base_netloc = urlparse(base_url).netloc
+    seen = {urlparse(base_url)._replace(fragment="").geturl()}
+
+    # 1) 同站 HTML 子頁
+    for a in soup.find_all("a", href=True):
+        absu = urljoin(base_url, a["href"])
+        p = urlparse(absu)
+        if p.netloc != base_netloc:
+            continue
+        clean = p._replace(fragment="", query="").geturl()
+        if clean in seen:
+            continue
+        path = p.path.lower()
+        if not (path.endswith(".html") or path.endswith(".htm") or path.endswith("/")):
+            continue
+        if any(x in path for x in ["login", "signin"]):
+            continue
+        seen.add(clean)
+        if len(seen) > 8:  # 避免爬太多
+            break
+        try:
+            resp = requests.get(clean, timeout=timeout, headers={"User-Agent": USER_AGENT})
+            if resp.ok and "text/html" in resp.headers.get("Content-Type", "text/html"):
+                chunks.append(decode_response_text(resp))
+                print(f"[info] 併入子頁: {clean}", file=sys.stderr)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[warn] 子頁失敗 {clean}: {exc}", file=sys.stderr)
+
+    merged = "\n".join(chunks)
+    if _plain_text_len(merged) >= min_chars:
+        return merged
+
+    # 2) inline script 中的可見文字（模板字串／中文內容）
+    text_bits: list[str] = []
+    for s in BeautifulSoup(merged, "html.parser").find_all("script"):
+        if s.get("src"):
+            continue
+        raw = s.string or s.get_text() or ""
+        if len(raw) < 80:
+            continue
+        # 抽出較長中文片段與引號字串
+        for frag in re.findall(r"[\u4e00-\u9fff][^\"'\\]{8,200}", raw):
+            text_bits.append(frag.strip())
+        for frag in re.findall(r'["\']([^"\']{20,400})["\']', raw):
+            if re.search(r"[\u4e00-\u9fff]", frag):
+                text_bits.append(frag.strip())
+    if text_bits:
+        # 去重保序
+        uniq: list[str] = []
+        seen_t: set[str] = set()
+        for t in text_bits:
+            if t in seen_t:
+                continue
+            seen_t.add(t)
+            uniq.append(t)
+        extr = "\n".join(uniq[:200])
+        print(f"[info] 自 script 抽出 {len(extr)} 字元補充文本", file=sys.stderr)
+        merged += f"\n<!-- extracted-script-text -->\n<div id='extracted-script-text'>{extr}</div>\n"
+    return merged
+
+
+def detect_fetch_limitation(source: str, html: str) -> str:
+    """標記無法完整抓取內容的情況，供結果解讀。"""
+    low = html.lower()
+    text_len = _plain_text_len(html)
+    if "gemini.google.com" in source and ("sign in" in low or text_len < 120):
+        return "gemini_login_wall"
+    if "streamlit.app" in source and text_len < 80:
+        return "streamlit_js_shell"
+    if ("vite.svg" in low or "/assets/index-" in low or "react" in low) and text_len < 120:
+        return "spa_js_bundle"
+    if text_len < 120:
+        return "sparse_html"
+    return ""
+
+
 def load_html(source: str, timeout: int = 30) -> str:
     """從 URL 或本機檔案讀取 HTML。"""
     parsed = urlparse(source)
@@ -169,17 +263,147 @@ def load_html(source: str, timeout: int = 30) -> str:
             headers={"User-Agent": USER_AGENT},
         )
         resp.raise_for_status()
-        return decode_response_text(resp)
+        html = decode_response_text(resp)
+        return expand_sparse_html(fetch_url, html, timeout=min(timeout, 20))
     path = Path(source)
     if not path.exists():
         raise FileNotFoundError(f"找不到檔案: {source}")
     return path.read_text(encoding="utf-8")
 
 
+def _js_object_array_to_json(js_array: str) -> list[dict[str, Any]]:
+    """把簡易 JS object array（const students = [...]）轉成 Python list。"""
+    js2 = re.sub(r"([{\[,]\s*)([A-Za-z_][A-Za-z0-9_]*)\s*:", r'\1"\2":', js_array)
+    js2 = re.sub(r",\s*([}\]])", r"\1", js2)
+    return json.loads(js2)
+
+
+def classify_work_link(url: str, label: str = "") -> tuple[bool, str]:
+    """
+    判斷是否為應納入尺規分析的「網頁作品」。
+    回傳 (是否分析, 平台標籤)。
+    """
+    u = url.lower()
+    label_l = label.lower()
+    if any(x in u for x in [".github.io", "hf.space", "huggingface.co/spaces"]):
+        if "huggingface.co/spaces" in u or "hf.space" in u:
+            return True, "Hugging Face Space"
+        return True, "GitHub Pages"
+    if "streamlit.app" in u:
+        return True, "Streamlit"
+    if "gemini.google.com/share" in u:
+        return True, "Gemini"
+    # 明顯非作品網頁本體
+    skip_hosts = (
+        "github.com/",
+        "github.dev/",
+        "colab.research.google.com",
+        "eeclass.utaipei.edu.tw",
+        ".m4a",
+        ".pdf",
+        ".png",
+        ".jpg",
+        ".jpeg",
+    )
+    if any(x in u for x in skip_hosts):
+        return False, label or "attachment"
+    if "作品" in label or "website" in label_l or "report" in label_l:
+        return True, label or "Web"
+    return False, label or "other"
+
+
+def parse_geophysics_students_js(html: str, semester: str) -> list[dict[str, Any]] | None:
+    """解析地球物理展示頁內嵌的 const students = [...] mid。"""
+    m = re.search(r"const\s+students\s*=\s*(\[\s*{.*?}\s*\])\s*;", html, flags=re.S)
+    if not m:
+        return None
+    try:
+        students = _js_object_array_to_json(m.group(1))
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] 無法解析 students JS 陣列: {exc}", file=sys.stderr)
+        return None
+
+    records: list[dict[str, Any]] = []
+    for s in students:
+        sid = str(s.get("studentId") or s.get("id") or "unknown").upper()
+        name = s.get("name") or ""
+        links = s.get("links") or []
+        extras = [
+            lk
+            for lk in links
+            if not classify_work_link(lk.get("url", ""), lk.get("label", ""))[0]
+        ]
+        work_links = []
+        for lk in links:
+            url = (lk.get("url") or "").strip()
+            label = lk.get("label") or ""
+            ok, platform = classify_work_link(url, label)
+            if ok:
+                work_links.append((url, platform, label))
+
+        # 每位學生優先分析 GitHub Pages / Streamlit / HF；Gemini 僅在沒有其他作品時納入
+        preferred = [w for w in work_links if w[1] != "Gemini"]
+        chosen = preferred if preferred else work_links
+
+        # 同網域多頁時保留主站（標籤含「作品」者優先，否則第一筆）
+        if chosen:
+            mains = [w for w in chosen if "作品" in w[2] or w[1] in {"Streamlit", "Hugging Face Space"}]
+            if mains:
+                # 仍保留所有 github.io 主站與 streamlit；略過同站 detail 子頁避免重複
+                dedup: list[tuple[str, str, str]] = []
+                seen_netloc_path: set[str] = set()
+                ordered = mains + [w for w in chosen if w not in mains]
+                for url, platform, label in ordered:
+                    parsed = urlparse(url)
+                    key = f"{parsed.netloc}{parsed.path}"
+                    # detail.html / 週次子頁：若已有同站主頁則略過
+                    if "detail.html" in parsed.path and any(
+                        urlparse(u).netloc == parsed.netloc for u, _, _ in dedup
+                    ):
+                        continue
+                    if key in seen_netloc_path:
+                        continue
+                    seen_netloc_path.add(key)
+                    dedup.append((url, platform, label))
+                chosen = dedup
+
+        if not chosen:
+            records.append(
+                {
+                    "student_id": sid,
+                    "name": name,
+                    "semester": semester,
+                    "platform": "(無可分析網頁)",
+                    "source": "",
+                    "attachment_count": len(extras),
+                    "html_content": "",
+                    "error": "no_web_link",
+                }
+            )
+            continue
+
+        for url, platform, _label in chosen:
+            records.append(
+                {
+                    "student_id": sid,
+                    "name": name,
+                    "semester": semester,
+                    "platform": platform,
+                    "source": url,
+                    "attachment_count": len(extras),
+                }
+            )
+    return records
+
+
 def parse_final_report_index(index_url: str, timeout: int = 30) -> list[dict[str, Any]]:
     """
-    解析期末報告彙整頁（article.station），抽出每位學生的網頁作品連結。
-    僅分析 GitHub Pages / Hugging Face 等網頁成果；PDF/IMG 附件另列計數。
+    解析期末報告彙整頁，抽出每位學生的網頁作品連結。
+
+    支援：
+    1. 地震學彙整頁：article.station + a.rlink
+    2. 地球物理展示頁：const students = [...]（JS 內嵌資料）
+    3. 後備：頁面外部 http(s) 連結
     """
     resp = requests.get(index_url, timeout=timeout, headers={"User-Agent": USER_AGENT})
     resp.raise_for_status()
@@ -187,70 +411,88 @@ def parse_final_report_index(index_url: str, timeout: int = 30) -> list[dict[str
     soup = BeautifulSoup(html, "html.parser")
     records: list[dict[str, Any]] = []
 
+    # 依 URL 粗分學期標籤
+    if "Geophysics" in index_url or "geophysic" in index_url.lower():
+        semester = "Geophysics_2025_final"
+    elif "Seismology" in index_url:
+        semester = "Seismology_2026_final"
+    else:
+        semester = "final_report"
+
+    # 1) 地球物理：JS students 陣列
+    geo = parse_geophysics_students_js(html, semester=semester)
+    if geo is not None:
+        print(f"[info] 以 JS students 陣列解析，共 {len(geo)} 筆作品連結", file=sys.stderr)
+        return geo
+
+    # 2) 地震學：article.station
     articles = soup.select("article.station")
-    if not articles:
-        # 後備：抓所有外部 http(s) 連結（排除本站 PDF/附件）
-        print("[warn] 找不到 article.station，改抓頁面外連。", file=sys.stderr)
-        seen: set[str] = set()
-        for a in soup.find_all("a", href=True):
-            href = a["href"].strip()
-            absu = urljoin(index_url, href)
-            if not absu.startswith("http"):
+    if articles:
+        for art in articles:
+            sid_el = art.select_one(".code")
+            name_el = art.select_one("h2")
+            sid = sid_el.get_text(strip=True) if sid_el else art.get("id", "unknown")
+            name = name_el.get_text(strip=True) if name_el else ""
+            attach_n = len(art.select(".attach a"))
+            web_links = art.select("a.rlink")
+            if not web_links:
+                records.append(
+                    {
+                        "student_id": sid,
+                        "name": name,
+                        "semester": semester,
+                        "platform": "(無網頁連結)",
+                        "source": "",
+                        "attachment_count": attach_n,
+                        "html_content": "",
+                        "error": "no_web_link",
+                    }
+                )
                 continue
-            if urlparse(absu).netloc == urlparse(index_url).netloc:
-                continue
-            if absu in seen:
-                continue
-            seen.add(absu)
-            records.append(
-                {
-                    "student_id": f"LINK{len(records)+1:02d}",
-                    "name": a.get_text(" ", strip=True)[:40],
-                    "semester": "Seismology_2026_final",
-                    "platform": "",
-                    "source": absu,
-                    "attachment_count": 0,
-                }
-            )
+            for a in web_links:
+                platform = ""
+                tag = a.select_one(".ltag")
+                if tag:
+                    platform = tag.get_text(strip=True)
+                url = a.get("href", "").strip()
+                records.append(
+                    {
+                        "student_id": sid,
+                        "name": name,
+                        "semester": semester,
+                        "platform": platform,
+                        "source": url,
+                        "attachment_count": attach_n,
+                    }
+                )
         return records
 
-    for art in articles:
-        sid_el = art.select_one(".code")
-        name_el = art.select_one("h2")
-        sid = sid_el.get_text(strip=True) if sid_el else art.get("id", "unknown")
-        name = name_el.get_text(strip=True) if name_el else ""
-        attach_n = len(art.select(".attach a"))
-        web_links = art.select("a.rlink")
-        if not web_links:
-            records.append(
-                {
-                    "student_id": sid,
-                    "name": name,
-                    "semester": "Seismology_2026_final",
-                    "platform": "(無網頁連結)",
-                    "source": "",
-                    "attachment_count": attach_n,
-                    "html_content": "",
-                    "error": "no_web_link",
-                }
-            )
+    # 3) 後備：抓所有外部 http(s) 連結（排除本站 PDF/附件）
+    print("[warn] 找不到已知彙整結構，改抓頁面外連。", file=sys.stderr)
+    seen: set[str] = set()
+    for a in soup.find_all("a", href=True):
+        href = a["href"].strip()
+        absu = urljoin(index_url, href)
+        if not absu.startswith("http"):
             continue
-        for a in web_links:
-            platform = ""
-            tag = a.select_one(".ltag")
-            if tag:
-                platform = tag.get_text(strip=True)
-            url = a.get("href", "").strip()
-            records.append(
-                {
-                    "student_id": sid,
-                    "name": name,
-                    "semester": "Seismology_2026_final",
-                    "platform": platform,
-                    "source": url,
-                    "attachment_count": attach_n,
-                }
-            )
+        if urlparse(absu).netloc == urlparse(index_url).netloc:
+            continue
+        ok, platform = classify_work_link(absu, a.get_text(" ", strip=True))
+        if not ok:
+            continue
+        if absu in seen:
+            continue
+        seen.add(absu)
+        records.append(
+            {
+                "student_id": f"LINK{len(records)+1:02d}",
+                "name": a.get_text(" ", strip=True)[:40],
+                "semester": semester,
+                "platform": platform,
+                "source": absu,
+                "attachment_count": 0,
+            }
+        )
     return records
 
 
@@ -425,6 +667,7 @@ def analyze_record(
             "來源": source,
             "附件數": attachment_count,
             "狀態": error or "empty_html",
+            "抓取限制": error or "empty_html",
             "媒體豐富度(1-4)": None,
             "排版架構(1-4)": None,
             "總字數": 0,
@@ -444,6 +687,7 @@ def analyze_record(
     media, layout, details = analyze_web_complexity(html_content)
     word_count, density, term_count, pure_text, term_hits = analyze_text_density(html_content)
     critical_ratio, method = analyze_reflection_level(pure_text, model=model)
+    limitation = detect_fetch_limitation(source, html_content)
 
     return {
         "學號": student_id,
@@ -452,7 +696,8 @@ def analyze_record(
         "平台": platform,
         "來源": source,
         "附件數": attachment_count,
-        "狀態": "ok",
+        "狀態": "limited" if limitation else "ok",
+        "抓取限制": limitation,
         "媒體豐富度(1-4)": media,
         "排版架構(1-4)": layout,
         "總字數": word_count,
@@ -527,28 +772,43 @@ def print_report(df: pd.DataFrame) -> None:
     except Exception:  # noqa: BLE001
         print(show.to_string(index=False))
 
-    ok = df[df["狀態"] == "ok"] if "狀態" in df.columns else df
-    if not ok.empty and "媒體豐富度(1-4)" in ok.columns:
+    scored = df[df["媒體豐富度(1-4)"].notna()] if "媒體豐富度(1-4)" in df.columns else df
+    reliable = scored
+    if "抓取限制" in df.columns:
+        blocked = {
+            "gemini_login_wall",
+            "streamlit_js_shell",
+            "spa_js_bundle",
+            "empty_html",
+            "no_web_link",
+        }
+        reliable = scored[~scored["抓取限制"].isin(blocked)]
+    if not scored.empty:
         print()
-        print("=== 班級摘要（僅成功抓取的網頁作品）===")
-        print(f"作品數: {len(ok)}")
-        print(
-            "平均｜媒體={:.2f} 排版={:.2f} 字數={:.0f} 密度={:.2f} 批判%={:.1f}".format(
-                ok["媒體豐富度(1-4)"].mean(),
-                ok["排版架構(1-4)"].mean(),
-                ok["總字數"].mean(),
-                ok["專有名詞密度(次/千字)"].mean(),
-                ok["批判思考佔比(%)"].mean(),
+        print("=== 班級摘要 ===")
+        print(f"抓取作品數: {len(scored)}；內容較完整可比較: {len(reliable)}")
+        if not reliable.empty:
+            print(
+                "平均（較完整）｜媒體={:.2f} 排版={:.2f} 字數={:.0f} 密度={:.2f} 批判%={:.1f}".format(
+                    reliable["媒體豐富度(1-4)"].mean(),
+                    reliable["排版架構(1-4)"].mean(),
+                    reliable["總字數"].mean(),
+                    reliable["專有名詞密度(次/千字)"].mean(),
+                    reliable["批判思考佔比(%)"].mean(),
+                )
             )
-        )
-        print(
-            "媒體分數分布:",
-            ok["媒體豐富度(1-4)"].value_counts().sort_index().to_dict(),
-        )
-        print(
-            "排版分數分布:",
-            ok["排版架構(1-4)"].value_counts().sort_index().to_dict(),
-        )
+            print(
+                "媒體分數分布:",
+                reliable["媒體豐富度(1-4)"].value_counts().sort_index().to_dict(),
+            )
+            print(
+                "排版分數分布:",
+                reliable["排版架構(1-4)"].value_counts().sort_index().to_dict(),
+            )
+        if "抓取限制" in df.columns:
+            lim = scored[scored["抓取限制"].astype(str).str.len() > 0]["抓取限制"].value_counts()
+            if not lim.empty:
+                print("抓取限制:", lim.to_dict())
 
     print()
     for _, row in df.iterrows():
@@ -558,10 +818,12 @@ def print_report(df: pd.DataFrame) -> None:
             print(f"平台: {row['平台']}")
         if row.get("來源"):
             print(f"來源: {row['來源']}")
-        if row.get("狀態") and row["狀態"] != "ok":
+        if row.get("狀態") and row["狀態"] not in {"ok", "limited"}:
             print(f"狀態: {row['狀態']}")
             print()
             continue
+        if row.get("抓取限制"):
+            print(f"抓取限制: {row['抓取限制']}")
         print(score_labels(int(row["媒體豐富度(1-4)"]), int(row["排版架構(1-4)"])))
         print(
             f"字數={row['總字數']} | 專有名詞={row.get('專有名詞出現次數', '?')} 次"
