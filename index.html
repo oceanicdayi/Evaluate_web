@@ -133,6 +133,11 @@
     .story cite { display: block; margin-top: 18px; color: var(--gold); font-style: normal; font-size: 14px; }
     .compare-card { padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.55); }
     .compare-card h3 { margin: 0 0 18px; font-size: 18px; }
+    .figure-grid { display: grid; grid-template-columns: 1fr; gap: 26px; margin: 44px 0; }
+    .figure-card { margin: 0; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); background: white; box-shadow: var(--shadow); }
+    .figure-card img { display: block; width: 100%; height: auto; border-radius: 14px; }
+    .figure-card figcaption { padding: 15px 8px 3px; color: var(--muted); font-size: 14px; }
+    .figure-card figcaption strong { color: var(--ink); }
     .bar-row { display: grid; grid-template-columns: 74px 1fr 52px; align-items: center; gap: 10px; margin: 9px 0; font-size: 13px; }
     .track { height: 10px; background: #ddd9ce; border-radius: 99px; overflow: hidden; }
     .fill { height: 100%; border-radius: inherit; background: var(--teal); }
@@ -318,6 +323,20 @@
           <div class="compare-card"><h3>批判思考訊號 <span class="delta">+4.19 pp</span></h3><div class="bar-row"><span>上學期</span><div class="track"><div class="fill alt" style="width:61%"></div></div><b>6.54</b></div><div class="bar-row"><span>下學期</span><div class="track"><div class="fill" style="width:100%"></div></div><b>10.73</b></div></div>
         </div>
         <div class="caution" style="margin:28px 0 46px"><strong>解讀：</strong>媒體與篇幅的提升最一致；排版大致維持三級導覽分區。術語密度上升與下降各半，內容變長不等於術語更集中。</div>
+        <div class="section-head" style="margin-top:62px">
+          <div><div class="kicker">Key figures</div><h2>圖一與圖二</h2></div>
+          <p class="section-note">以相同的 8 位高信度配對學生，呈現作品複雜度分布與文本指標的個別移動。</p>
+        </div>
+        <div class="figure-grid">
+          <figure class="figure-card">
+            <img src="figure1_web_complexity_distribution.svg" alt="圖一：媒體豐富度與排版架構在上下學期的一至四分人數分布長條圖">
+            <figcaption><strong>圖一　學生網頁作品複雜度評分分布。</strong>媒體豐富度由上學期的 1–2 分為主，轉為下學期 6/8 人達 4 分；排版則兩學期皆以 3 分導覽分區為主。</figcaption>
+          </figure>
+          <figure class="figure-card">
+            <img src="figure2_text_analytics_trajectory.svg" alt="圖二：八位學生的專有名詞密度與批判思考比例跨學期散布及移動箭頭">
+            <figcaption><strong>圖二　文本分析指標的跨學期位移。</strong>每支箭頭連接同一位學生的上下學期作品；金色虛線為班級平均。因未取得先備成績，本圖不作高低成就分群。</figcaption>
+          </figure>
+        </div>
         <article class="report-shell"><div id="report-longitudinal" class="prose"></div></article>
       </div>
     </section>
@@ -435,6 +454,8 @@
           <a class="download" href="results_geophysics_2025_final.csv"><strong>地球物理期末結果</strong><small>CSV · 19 份</small></a>
           <a class="download" href="results_seismology_2026_final_primary.csv"><strong>地震學期末結果</strong><small>CSV · 18 份代表作</small></a>
           <a class="download" href="seismology_2026_hw2_results.csv"><strong>第一個網頁作業結果</strong><small>CSV · 20 份</small></a>
+          <a class="download" href="figure1_web_complexity_distribution.svg"><strong>圖一：網頁複雜度分布</strong><small>SVG · 可直接用於論文排版</small></a>
+          <a class="download" href="figure2_text_analytics_trajectory.svg"><strong>圖二：文本指標位移</strong><small>SVG · 配對散布圖</small></a>
         </div>
 
         <div class="caution" style="margin-top:46px">
