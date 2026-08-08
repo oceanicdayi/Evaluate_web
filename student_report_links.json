@@ -1,384 +1,230 @@
 {
-  "index": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/",
   "student_count": 18,
   "web_link_count": 21,
   "attachment_count": 38,
   "students": [
     {
-      "student_id": "U11110003",
-      "name": "林幼鎂",
+      "匿名代碼": "S015",
       "web_links": [
         {
-          "platform": "Hugging Face Space",
-          "url": "https://huggingface.co/spaces/Umi000123/Seismology_Final"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF 地震學期末報告PPT.pdf 7.7 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11110003/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8APPT.pdf"
-        },
-        {
-          "name": "PDF 地震學期末報告report.pdf 3.5 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11110003/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8Areport.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11208045",
-      "name": "邵雅涓",
+      "匿名代碼": "S020",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://d2844gfmyz-sys.github.io/seismology_-all/"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": []
     },
     {
-      "student_id": "U11308127",
-      "name": "林宜諠",
+      "匿名代碼": "S012",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://yixuan-linlin.github.io/finalreport/"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": []
     },
     {
-      "student_id": "U11310002",
-      "name": "陳亞歆",
+      "匿名代碼": "S022",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://yaxin06.github.io/2026_raspberrypi/"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF seismology_raspberrypi__Presentation.pdf 448 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310002/seismology_raspberrypi__Presentation.pdf"
-        },
-        {
-          "name": "PDF seismology_raspberrypi_report.pdf 256 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310002/seismology_raspberrypi_report.pdf"
-        },
-        {
-          "name": "IMG 螢幕擷取畫面 2026-06-10 204237.png 117 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310002/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-06-10%20204237.png"
-        },
-        {
-          "name": "IMG 螢幕擷取畫面 2026-06-10 204308.png 359 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310002/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-06-10%20204308.png"
-        }
+        {},
+        {},
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310003",
-      "name": "陳佑昇",
+      "匿名代碼": "S006",
       "web_links": [
         {
-          "platform": "Hugging Face Space",
-          "url": "https://huggingface.co/spaces/1280duck/seis_final_project"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF 地震學期末report.pdf 6.0 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310003/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%ABreport.pdf"
-        },
-        {
-          "name": "PDF 地震學期末報告.pdf 5.9 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310003/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8A.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310004",
-      "name": "邱定軒",
+      "匿名代碼": "S003",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://u11310004.github.io/HW11_u11310004-2d/"
+          "platform": "GitHub Pages"
         },
         {
-          "platform": "Hugging Face Space",
-          "url": "https://huggingface.co/spaces/u11310004/HW11_u11310004.2d"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF HW11overleafPresentaciones.pdf 1.2 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310004/HW11overleafPresentaciones.pdf"
-        },
-        {
-          "name": "PDF HW11overleafreprot.pdf 842 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310004/HW11overleafreprot.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310006",
-      "name": "黃勝彥",
+      "匿名代碼": "S024",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://u11310006-glitch.github.io/seismology-final/"
+          "platform": "GitHub Pages"
         },
         {
-          "platform": "Hugging Face Space",
-          "url": "https://huggingface.co/spaces/Sam0424/seismology-final"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF 地震學作業11 presentation.pdf 278 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310006/%E5%9C%B0%E9%9C%87%E5%AD%B8%E4%BD%9C%E6%A5%AD11%20presentation.pdf"
-        },
-        {
-          "name": "PDF 地震學作業11 reports.pdf 312 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310006/%E5%9C%B0%E9%9C%87%E5%AD%B8%E4%BD%9C%E6%A5%AD11%20reports.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310007",
-      "name": "楊廂甯",
+      "匿名代碼": "S016",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://icon826.github.io/raspberrypi/"
+          "platform": "GitHub Pages"
         },
         {
-          "platform": "Hugging Face Space",
-          "url": "https://huggingface.co/spaces/Icon826/raspberrypi"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF 地震學期末總報告presentation.pdf 778 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310007/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%AB%E7%B8%BD%E5%A0%B1%E5%91%8Apresentation.pdf"
-        },
-        {
-          "name": "PDF 地震學期末總報告report.pdf 838 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310007/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%AB%E7%B8%BD%E5%A0%B1%E5%91%8Areport.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310009",
-      "name": "李政暟",
+      "匿名代碼": "S010",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://zxcvbnm010043-bot.github.io/seismology_HW11_final_report/"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF seismology_final_report_CH1_presentation.pdf 143 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310009/seismology_final_report_CH1_presentation.pdf"
-        },
-        {
-          "name": "PDF seismology_final_report_CH1_report.pdf 191 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310009/seismology_final_report_CH1_report.pdf"
-        },
-        {
-          "name": "PDF seismology_final_report_CH3_presentation.pdf 130 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310009/seismology_final_report_CH3_presentation.pdf"
-        },
-        {
-          "name": "PDF seismology_final_report_CH3_report.pdf 191 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310009/seismology_final_report_CH3_report.pdf"
-        },
-        {
-          "name": "PDF seismology_final_report_CH4_presentation.pdf 952 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310009/seismology_final_report_CH4_presentation.pdf"
-        },
-        {
-          "name": "PDF seismology_final_report_CH4_report.pdf 1013 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310009/seismology_final_report_CH4_report.pdf"
-        }
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310015",
-      "name": "曾柏凱",
+      "匿名代碼": "S013",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://tsengpokai.github.io/FINAL_REPORT/"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF 使用overleaf製作期末報告--以presentation形式_曾柏凱.pdf 20.5 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310015/%E4%BD%BF%E7%94%A8overleaf%E8%A3%BD%E4%BD%9C%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8A--%E4%BB%A5presentation%E5%BD%A2%E5%BC%8F_%E6%9B%BE%E6%9F%8F%E5%87%B1.pdf"
-        },
-        {
-          "name": "PDF 使用overleaf製作期末報告--以report形式_曾柏凱.pdf 25.3 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310015/%E4%BD%BF%E7%94%A8overleaf%E8%A3%BD%E4%BD%9C%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8A--%E4%BB%A5report%E5%BD%A2%E5%BC%8F_%E6%9B%BE%E6%9F%8F%E5%87%B1.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310016",
-      "name": "張智詠",
+      "匿名代碼": "S002",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://earthearthton-prog.github.io/final_report/"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF 期末報告overleaf(pre).pdf 2.9 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310016/%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8Aoverleaf%28pre%29.pdf"
-        },
-        {
-          "name": "PDF 期末報告overleaf(rep).pdf 2.9 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310016/%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8Aoverleaf%28rep%29.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310017",
-      "name": "黃靖家",
+      "匿名代碼": "S009",
       "web_links": [
         {
-          "platform": "Hugging Face Space",
-          "url": "https://huggingface.co/spaces/JinJia0618/seiesmology_final_report"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "IMG image.png 493 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310017/image.png"
-        },
-        {
-          "name": "PDF presentation.pdf 470 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310017/presentation.pdf"
-        },
-        {
-          "name": "PDF report.pdf 388 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310017/report.pdf"
-        },
-        {
-          "name": "IMG 螢幕擷取畫面 2026-06-07 013512.png 357 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310017/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-06-07%20013512.png"
-        }
+        {},
+        {},
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310019",
-      "name": "林煜宸",
+      "匿名代碼": "S014",
       "web_links": [
         {
-          "platform": "Hugging Face Space",
-          "url": "https://huggingface.co/spaces/u11310019/seismos"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF presentation.pdf 850 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310019/presentation.pdf"
-        },
-        {
-          "name": "PDF report.pdf 935 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310019/report.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310021",
-      "name": "何宣樂",
+      "匿名代碼": "S021",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://u11310021-bug.github.io/seismology_final/index.html"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF 地震學期末報告_presentation.pdf 276 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310021/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8A_presentation.pdf"
-        },
-        {
-          "name": "PDF 地震學期末報告_report.pdf 281 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310021/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8A_report.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310022",
-      "name": "陳柏亘",
+      "匿名代碼": "S011",
       "web_links": [
         {
-          "platform": "Hugging Face Space",
-          "url": "https://huggingface.co/spaces/Sapphirejimmy/seismology_final"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF presentation.pdf 4.0 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310022/presentation.pdf"
-        },
-        {
-          "name": "PDF report.pdf 4.1 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310022/report.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310028",
-      "name": "林靖融",
+      "匿名代碼": "S007",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://rrrnnn0518-ux.github.io/2026_sesmology_review/#assignments"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": []
     },
     {
-      "student_id": "U11310029",
-      "name": "洪敏書",
+      "匿名代碼": "S017",
       "web_links": [
         {
-          "platform": "GitHub Pages",
-          "url": "https://minh891711.github.io/seismology_finalreport/"
+          "platform": "GitHub Pages"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF 地球物理期末報告presentation.pdf 8.4 MB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310029/%E5%9C%B0%E7%90%83%E7%89%A9%E7%90%86%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8Apresentation.pdf"
-        },
-        {
-          "name": "PDF 地球物理期末報告report.pdf 369 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310029/%E5%9C%B0%E7%90%83%E7%89%A9%E7%90%86%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8Areport.pdf"
-        }
+        {},
+        {}
       ]
     },
     {
-      "student_id": "U11310036",
-      "name": "蕭筠安",
+      "匿名代碼": "S018",
       "web_links": [
         {
-          "platform": "Hugging Face Space",
-          "url": "https://hsiaoyunan36-seismologyterm-framework.static.hf.space"
+          "platform": "Hugging Face Space"
         }
       ],
       "attachments": [
-        {
-          "name": "PDF UVT_Beamer_Theme.pdf 362 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310036/UVT_Beamer_Theme.pdf"
-        },
-        {
-          "name": "PDF 地震學期末專題研究報告 (1).pdf 301 KB",
-          "url": "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/students/u11310036/%E5%9C%B0%E9%9C%87%E5%AD%B8%E6%9C%9F%E6%9C%AB%E5%B0%88%E9%A1%8C%E7%A0%94%E7%A9%B6%E5%A0%B1%E5%91%8A%20%281%29.pdf"
-        }
+        {},
+        {}
       ]
     }
   ]

@@ -119,16 +119,7 @@ def figure2(data: pd.DataFrame) -> str:
     def sy(value: float) -> float:
         return bottom - value / y_max * plot_h
 
-    label_offsets = {
-        "陳亞歆": (10, -8),
-        "邱定軒": (10, -12),
-        "楊廂甯": (10, 20),
-        "李政暟": (10, 18),
-        "張智詠": (10, -8),
-        "陳柏亘": (10, 19),
-        "林靖融": (10, -10),
-        "洪敏書": (10, 18),
-    }
+    label_offsets = [(10, -9), (10, -12), (10, 20), (10, 18), (10, -8), (10, 19), (10, -10), (10, 18)]
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
         '<title id="title">圖二：專有名詞密度與批判思考比例之跨學期位移</title>',
@@ -161,8 +152,8 @@ def figure2(data: pd.DataFrame) -> str:
         f'<text x="{(left + right) / 2}" y="785" text-anchor="middle" fill="{INK}" font-family="{FONT}" font-size="18" font-weight="700">專有名詞密度（次／千字）</text>',
         f'<text x="38" y="{(top + bottom) / 2}" transform="rotate(-90 38 {(top + bottom) / 2})" text-anchor="middle" fill="{INK}" font-family="{FONT}" font-size="18" font-weight="700">批判思考比例（%）</text>',
     ]
-    for _, row in data.iterrows():
-        name = str(row["姓名"])
+    for index, (_, row) in enumerate(data.iterrows()):
+        anonymous_id = str(row["匿名代碼"])
         ux = float(row["專有名詞密度(次/千字)_上學期"])
         uy = float(row["批判思考佔比(%)_上學期"])
         lx = float(row["專有名詞密度(次/千字)_下學期"])
@@ -172,9 +163,9 @@ def figure2(data: pd.DataFrame) -> str:
             f'<circle cx="{sx(ux):.1f}" cy="{sy(uy):.1f}" r="7" fill="{UPPER}" stroke="white" stroke-width="2"/>',
             f'<circle cx="{sx(lx):.1f}" cy="{sy(ly):.1f}" r="8" fill="{LOWER}" stroke="white" stroke-width="2"/>',
         ]
-        dx, dy = label_offsets.get(name, (10, -8))
+        dx, dy = label_offsets[index % len(label_offsets)]
         svg.append(
-            f'<text x="{sx(lx) + dx:.1f}" y="{sy(ly) + dy:.1f}" fill="{INK}" font-family="{FONT}" font-size="14" font-weight="650">{esc(name)}</text>'
+            f'<text x="{sx(lx) + dx:.1f}" y="{sy(ly) + dy:.1f}" fill="{INK}" font-family="{FONT}" font-size="14" font-weight="650">{esc(anonymous_id)}</text>'
         )
     mean_ux = data["專有名詞密度(次/千字)_上學期"].mean()
     mean_uy = data["批判思考佔比(%)_上學期"].mean()

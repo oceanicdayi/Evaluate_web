@@ -9,10 +9,10 @@
 4. 反思層次 / 批判思考佔比 (Critical Reflection %)
 
 用法：
-  python analyze_web.py https://oceanicdayi.github.io/Utaipei_2026_summer/
+  python analyze_web.py https://example.edu/student-work/
   python analyze_web.py page.html --student S001 --semester Summer2026
   python analyze_web.py urls.txt --csv results.csv
-  python analyze_web.py --index https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/
+  python analyze_web.py --index https://example.edu/final-report-index/
 
 若設定環境變數 GEMINI_API_KEY，會以 Gemini 評估反思層次；
 否則改用關鍵詞啟發式估計（結果欄位會標示方法）。
@@ -933,10 +933,10 @@ def main() -> int:
     if not args.sources and not args.demo and not args.index:
         parser.print_help()
         print("\n範例：")
-        print("  python analyze_web.py https://oceanicdayi.github.io/Utaipei_2026_summer/")
+        print("  python analyze_web.py https://example.edu/student-work/")
         print(
             "  python analyze_web.py --index "
-            "https://oceanicdayi.github.io/Seismology_2026_final_report_Utaipei/"
+            "https://example.edu/final-report-index/"
         )
         print("  python analyze_web.py --demo")
         return 2

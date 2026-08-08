@@ -332,6 +332,8 @@ def main() -> int:
         default="seismology_2026_hw2_prior_advantage_deep_dive.md",
     )
     args = parser.parse_args()
+    if not args.archive:
+        parser.error("--archive is required; the identifiable source archive is not public")
 
     evidence = collect_assignment_evidence(args.archive, args.assignment_results)
     summary = build_deep_summary(evidence)

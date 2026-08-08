@@ -1,19 +1,19 @@
-﻿學號,姓名,平台,來源,媒體豐富度(1-4),排版架構(1-4),總字數,專有名詞密度(次/千字),批判思考佔比(%),附件數,狀態,組別
-U11310002,陳亞歆,GitHub Pages,https://yaxin06.github.io/2026_raspberrypi/,4,3,6802,9.11,18.2,4,ok,上學期作品名單內
-U11310003,陳佑昇,Hugging Face Space,https://huggingface.co/spaces/1280duck/seis_final_project,4,2,6902,19.85,17.2,2,ok,上學期作品名單內
-U11310004,邱定軒,GitHub Pages,https://u11310004.github.io/HW11_u11310004-2d/,2,3,4315,15.99,15.0,2,ok,上學期作品名單內
-U11310007,楊廂甯,GitHub Pages,https://icon826.github.io/raspberrypi/,4,3,2527,15.43,9.4,2,ok,上學期作品名單內
-U11310009,李政暟,GitHub Pages,https://zxcvbnm010043-bot.github.io/seismology_HW11_final_report/,4,2,1808,27.1,4.8,6,ok,上學期作品名單內
-U11310015,曾柏凱,GitHub Pages,https://tsengpokai.github.io/FINAL_REPORT/,3,3,5195,18.09,21.4,2,ok,上學期作品名單內
-U11310016,張智詠,GitHub Pages,https://earthearthton-prog.github.io/final_report/,4,3,1588,41.56,9.1,2,ok,上學期作品名單內
-U11310017,黃靖家,Hugging Face Space,https://huggingface.co/spaces/JinJia0618/seiesmology_final_report,4,3,1218,28.74,16.7,4,ok,上學期作品名單內
-U11310019,林煜宸,Hugging Face Space,https://huggingface.co/spaces/u11310019/seismos,4,3,6066,16.32,11.1,2,ok,上學期作品名單內
-U11310021,何宣樂,GitHub Pages,https://u11310021-bug.github.io/seismology_final/index.html,3,3,507,51.28,12.5,2,ok,上學期作品名單內
-U11310022,陳柏亘,Hugging Face Space,https://huggingface.co/spaces/Sapphirejimmy/seismology_final,4,3,5087,26.54,4.3,2,ok,上學期作品名單內
-U11310028,林靖融,GitHub Pages,https://rrrnnn0518-ux.github.io/2026_sesmology_review/#assignments,2,3,4053,42.68,16.7,0,ok,上學期作品名單內
-U11310029,洪敏書,GitHub Pages,https://minh891711.github.io/seismology_finalreport/,4,3,3361,31.54,8.3,2,ok,上學期作品名單內
-U11110003,林幼鎂,Hugging Face Space,https://huggingface.co/spaces/Umi000123/Seismology_Final,2,3,3955,33.12,10.2,2,ok,未見於上學期作品名單
-U11208045,邵雅涓,GitHub Pages,https://d2844gfmyz-sys.github.io/seismology_-all/,4,3,1546,11.0,33.3,0,ok,未見於上學期作品名單
-U11308127,林宜諠,GitHub Pages,https://yixuan-linlin.github.io/finalreport/,3,2,394,43.15,0.0,0,ok,未見於上學期作品名單
-U11310006,黃勝彥,GitHub Pages,https://u11310006-glitch.github.io/seismology-final/,4,3,2150,34.42,18.8,2,ok,未見於上學期作品名單
-U11310036,蕭筠安,Hugging Face Space,https://hsiaoyunan36-seismologyterm-framework.static.hf.space,4,3,13091,21.54,7.6,2,ok,未見於上學期作品名單
+﻿匿名代碼,平台,媒體豐富度(1-4),排版架構(1-4),總字數,專有名詞密度(次/千字),批判思考佔比(%),附件數,狀態,組別
+S022,GitHub Pages,4,3,6802,9.11,18.2,4,ok,上學期作品名單內
+S006,Hugging Face Space,4,2,6902,19.85,17.2,2,ok,上學期作品名單內
+S003,GitHub Pages,2,3,4315,15.99,15.0,2,ok,上學期作品名單內
+S016,GitHub Pages,4,3,2527,15.43,9.4,2,ok,上學期作品名單內
+S010,GitHub Pages,4,2,1808,27.1,4.8,6,ok,上學期作品名單內
+S013,GitHub Pages,3,3,5195,18.09,21.4,2,ok,上學期作品名單內
+S002,GitHub Pages,4,3,1588,41.56,9.1,2,ok,上學期作品名單內
+S009,Hugging Face Space,4,3,1218,28.74,16.7,4,ok,上學期作品名單內
+S014,Hugging Face Space,4,3,6066,16.32,11.1,2,ok,上學期作品名單內
+S021,GitHub Pages,3,3,507,51.28,12.5,2,ok,上學期作品名單內
+S011,Hugging Face Space,4,3,5087,26.54,4.3,2,ok,上學期作品名單內
+S007,GitHub Pages,2,3,4053,42.68,16.7,0,ok,上學期作品名單內
+S017,GitHub Pages,4,3,3361,31.54,8.3,2,ok,上學期作品名單內
+S015,Hugging Face Space,2,3,3955,33.12,10.2,2,ok,未見於上學期作品名單
+S020,GitHub Pages,4,3,1546,11.0,33.3,0,ok,未見於上學期作品名單
+S012,GitHub Pages,3,2,394,43.15,0.0,0,ok,未見於上學期作品名單
+S024,GitHub Pages,4,3,2150,34.42,18.8,2,ok,未見於上學期作品名單
+S018,Hugging Face Space,4,3,13091,21.54,7.6,2,ok,未見於上學期作品名單

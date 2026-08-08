@@ -22,9 +22,7 @@ from analyze_web import (
     load_html,
 )
 
-DEFAULT_ARCHIVE = (
-    "https://raw.githubusercontent.com/oceanicdayi/Evaluate_web/main/hw_68852-1.zip"
-)
+DEFAULT_ARCHIVE = ""
 PRIOR_GROUP = "上學期作品名單內"
 NEW_GROUP = "未見於上學期作品名單"
 METRICS = {
@@ -389,6 +387,8 @@ def main() -> int:
         help="Markdown 報告",
     )
     args = parser.parse_args()
+    if not args.archive:
+        parser.error("--archive is required; the identifiable source archive is not public")
 
     scored = analyze_archive(args.archive, args.prior_roster)
     summary = summarize(scored)
