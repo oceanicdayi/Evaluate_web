@@ -7,6 +7,7 @@ import argparse
 import re
 import sys
 from pathlib import Path
+from urllib.parse import urlparse
 
 import pandas as pd
 
@@ -30,6 +31,18 @@ def truthy(value) -> bool:
     return str(value).strip().lower() not in {"0", "false", "no", "n", "exclude"}
 
 
+def resolve_source(source: str, input_csv: Path) -> str:
+    """Resolve local relative sources against the private CSV directory."""
+    source = source.strip()
+    parsed = urlparse(source)
+    if parsed.scheme in {"http", "https"}:
+        return source
+    path = Path(source).expanduser()
+    if path.is_absolute():
+        return str(path)
+    return str((input_csv.parent / path).resolve())
+
+
 def split_sentences(text: str, min_chars: int = 12) -> list[str]:
     raw = re.split(r"(?<=[。！？!?])\s*|\n+", text)
     cleaned: list[str] = []
@@ -38,7 +51,6 @@ def split_sentences(text: str, min_chars: int = 12) -> list[str]:
         if len(sentence) < min_chars:
             continue
         if len(sentence) > 600:
-            # Extremely long fragments are usually failed segmentation.
             continue
         cleaned.append(sentence)
     return cleaned
@@ -62,7 +74,8 @@ def main() -> int:
     parser.add_argument("--seed", type=int, default=20260810)
     args = parser.parse_args()
 
-    src = pd.read_csv(args.input, dtype=str)
+    input_csv = Path(args.input).expanduser().resolve()
+    src = pd.read_csv(input_csv, dtype=str)
     missing = REQUIRED - set(src.columns)
     if missing:
         raise SystemExit(f"Missing columns: {sorted(missing)}")
@@ -73,7 +86,7 @@ def main() -> int:
     for _, item in src.iterrows():
         private_id = str(item["private_id"])
         stage = str(item["stage"])
-        source = str(item["source"])
+        source = resolve_source(str(item["source"]), input_csv)
         try:
             html = load_html(source)
             _, _, _, text, _ = analyze_text_density(html)
@@ -122,7 +135,6 @@ def main() -> int:
 
     selected = pd.concat(selected_parts, ignore_index=False) if selected_parts else pool.iloc[0:0]
 
-    # Fill any shortage caused by a small stage from the remaining pool.
     shortage = target - len(selected)
     if shortage > 0:
         remaining = pool.loc[~pool.index.isin(selected_indices)]
