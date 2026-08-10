@@ -1,83 +1,241 @@
 # Evaluate_web
 
-從數位敘事與文本分析探討 AI 融入地球科學教學之成效：學生網頁作品之縱向研究
+## AI 輔助地球科學數位作品的縱向研究
 
-**Evaluating AI-Integrated Earth Science Education through Text Analytics and Digital Storytelling: A Longitudinal Study of Student Web Projects**
+**Longitudinal Development of AI-Supported Digital Artifacts in Earth Science Education**
 
-投稿目標：[ASET 2026 投稿與發表](https://aset2026.com/%e6%8a%95%e7%a8%bf%e8%88%87%e7%99%bc%e8%a1%a8-submission/#B)
+本專案以學生在大學地球科學課程中產製的網頁作品為研究資料，探討在連續使用生成式 AI 與網頁部署工具的課程環境下，數位作品如何隨經驗累積而發展。
 
-- 中文摘要：500 字內，不超過一頁
-- Abstracts：300 words
-- 審查用研究短文：三頁內；需包含研究目的、研究重要性、研究方法、研究結果與討論、關鍵圖表及參考文獻
+研究場域包括臺北市立大學「地球物理」與「地震學」課程。學生使用 ChatGPT、Gemini 等生成式 AI 工具協助整理學科內容，並透過 GitHub Pages、Hugging Face、Streamlit 等平台製作與發布數位作品。
 
----
+本研究不把網頁精美程度視為學科成績，也不直接推論 AI 對學習成效的因果效果；核心是把學生作品視為 **digital artifacts**，分析其媒體整合、版面結構、內容量、學科語言與反思表達的縱向變化。
 
-## 中文摘要
-
-隨著生成式 AI 的普及，跨領域資訊素養成為科學教育的重要指標。本研究旨在探討於地球科學課程中，連續兩學期導入 AI 工具（ChatGPT, Gemini）與雲端部署（GitHub, HuggingFace, Google Antigravity），對學生數位作品「品質與內容豐富度」的縱向影響。本研究以台北市立大學「地球物理」與「地震學」課程為場域，學生需將學科知識與實驗心得透過 AI 輔助製作為網頁。為客觀評估成效，本研究捨棄傳統學科測驗，專注於「數位成品分析」，並建立專屬「網頁複雜度尺規（1–4 分）」，量化評估其「媒體豐富度」（從純文字至多重 AI 資源整合）與「排版架構」（從單頁流水帳至 API 動態網頁）。此外，本研究導入「文本分析」，計算學生網頁內容之字數與專有名詞密度，並運用 AI 輔助判定文本中「描述性文字」與「批判性思考」之比例。初步結果顯示，多數學生在下學期之網頁複雜度與批判反思層次皆有顯著提升；值得注意的是，初期學科表現較弱的學生，因 AI 降低寫作門檻與網頁產出的高成就感，其作品的字數、專有名詞密度與媒體豐富度呈現爆發性成長，證實此教學法不僅提升資訊技能，更能有效激發低成就學生的學習動機與學科參與度。
+投稿目標：ASET 2026。
 
 ---
 
-## Abstract
+## 研究問題
 
-As generative AI becomes ubiquitous, interdisciplinary digital literacy is crucial in science education. This longitudinal study investigates the impact of integrating AI tools (ChatGPT, Gemini) and cloud deployment platforms (GitHub, HuggingFace, Google Antigravity) on the "quality and richness" of students' digital artifacts over two consecutive semesters. Conducted in "Geophysics" and "Seismology" courses at the University of Taipei, students were required to synthesize textbook knowledge and lab reports into web pages using AI.
+### RQ1 — 縱向發展
 
-To objectively assess learning outcomes, this study bypassed traditional grading and focused exclusively on digital artifact analysis. A custom "Web Complexity Rubric (1–4 scale)" was developed to quantify "Media Richness" (ranging from text-only to complex AI-resource integration) and "Layout Structure" (from linear text to API-driven dynamic pages). Furthermore, text analytics were applied to measure word count and technical terminology density. AI was also utilized to analyze the students' reflection depth, calculating the ratio of descriptive text versus critical thinking.
+在連續兩學期的 AI 輔助地球科學課程中，同一批學生的數位作品在媒體整合、版面結構、可見文本量、學科語言與反思訊號上如何改變？
 
-Preliminary results indicate a significant increase in both web complexity and critical reflection levels in the second semester. Notably, initially low-achieving students demonstrated exponential growth in word count, terminology density, and media richness. The tangible success of web deployment, combined with AI lowering the writing barrier, significantly boosted their learning motivation and subject engagement. This study provides empirical evidence that integrating AI and web development into STEM courses not only enhances IT skills but also revitalizes the academic participation of underperforming students.
+### RQ2 — 先備數位作品經驗
+
+已有前一學期數位作品紀錄的學生，是否在下一學期第一次網頁作業中呈現較強的內容建構表現？
+
+### RQ3 — 組間趨同
+
+若存在與先備經驗相關的早期差異，該差異是否在一學期共同的 AI 輔助網頁製作經驗後縮小？
+
+完整研究問題、統計設計與可／不可支持的結論整理於：
+
+- [`ASET_2026_research_framework.md`](ASET_2026_research_framework.md)
+- [`ASET_2026_submission_draft.md`](ASET_2026_submission_draft.md)
 
 ---
 
-## 審查用研究短文
+## 分析架構
 
-### 一、研究目的
+核心程式 `analyze_web.py` 會讀取學生網頁作品，並量化下列指標：
 
-1. 建立具體可量化之「數位作品複雜度尺規」與「文本分析指標」，以客觀評量學生在跨領域資訊融入教學中，其產出作品之品質與內容豐富度變化。
-2. 探討在連續兩學期的 AI 協作與網頁部署訓練下，學生作品在「媒體呈現、排版架構、學科專有名詞密度、以及反思層次」上的縱向發展。
-3. 分析此教學法對不同先備學術表現（尤其是初期成績較不理想）學生之學習動機與參與度的實質影響。
+1. **媒體豐富度（1–4）**：由純文字、基礎圖文、互動多媒體至進階視覺／動態資源。
+2. **排版架構（1–4）**：由基本內容結構、導覽與分區至 API／動態資料整合。
+3. **可見文本字元數**：正規化後可見文字的字元總數。
+4. **專有名詞使用**：依地球物理與地震學字典計算絕對次數與每千字密度。
+5. **啟發式批判反思訊號**：依比較、限制、疑問、反思、改進等語言訊號估算批判反思句比例。
 
-### 二、研究重要性
+這些指標描述的是作品特徵，不直接測量地球科學內容正確性。
 
-傳統地球科學課程多以紙本考試或單向報告評量，難以展現學生對知識的重組與數位敘事能力。本研究跳脫「以分數論成敗」的框架，首創針對地科課程數位作業的「網頁複雜度與文本分析雙軌評量法」。透過量化學生的「表達品質」與「反思深度」，不僅能更精準地捕捉 AI 工具對學習行為的實質改變，更為大專校院未來評估「AI 輔助專題導向學習（PBL）」提供了具體的評量工具與實證參考。
+詳細計算方式見 [`metric_calculation_method.md`](metric_calculation_method.md)。
 
-### 三、研究方法
+---
 
-本研究採量化之數位成品分析法（Digital Artifact Analysis），收集學生上下學期之網頁作業原始碼與文本。所有作品皆隱去地科知識之對錯，純粹聚焦於「呈現品質」與「文本豐富度」進行量化評估。
+## 資料處理特色
 
-#### 1. 網頁資訊作品複雜度尺規（Rubric, 1–4 分）
+`analyze_web.py` 已針對學生實際部署環境處理多種情況，包括：
 
-兩位評分者依據以下標準進行雙盲評分：
+- GitHub Pages
+- Hugging Face Spaces 實際 deployment host
+- Streamlit
+- Gemini 分享頁登入限制
+- React／SPA 稀疏 HTML
+- 同站子頁補抓
+- JavaScript／JSX 可見文字補充
+- 中文頁面編碼處理
+- 抓取限制標記
 
-| 評分維度 | 1 分（基礎） | 2 分（進階） | 3 分（優良） | 4 分（卓越） |
-| --- | --- | --- | --- | --- |
-| 媒體豐富度 | 僅有純文字 | 具備基礎圖文搭配 | 包含互動式圖表或動態網頁元素 | 深度整合多種 AI 生成資源（如語音、影片、複雜視覺架構） |
-| 排版與架構 | 單頁流水帳式呈現 | 具備基本段落與標題區隔 | 具備明確的導覽列（Navbar）與多重分頁設計 | 運用 API（如 Google Antigravity）達成高度動態特效與資料串接 |
+因此研究資料除了分數外，也保留「資料是否可可靠讀取」的品質資訊，避免將登入牆、SPA shell 或極短頁面誤當成完整作品。
 
-#### 2. 文本分析（Text Analytics）
+---
 
-- **基礎量化**：導出網頁純文字，計算總字數，並比對地球科學／地震學字典，計算「專有名詞密度（Technical Term Density）」。
-- **反思層次分析（AI 輔助評量）**：運用大語言模型（如 Gemini Pro）對學生的文本進行語意分析，將語句標籤化為「描述性文字（敘述課本或實驗步驟）」與「批判性思考文字（探討優缺點、比較差異、提出疑問）」，計算後者所佔之比例。
+## 目前主要結果
 
-### 四、研究結果與討論
+### 1. 跨學期高信度配對
 
-#### 1. 作品精緻度與技術深度的整體躍升
+完成跨學期配對 13 人，其中 8 人符合高信度比較條件。
 
-研究發現，多數學生在上學期初期的媒體豐富度與排版架構多落於 1–2 分；而在下學期（地震學）末期，平均分數顯著提升至 3 分以上，甚至有多位學生達到 4 分，成功導入 Google Antigravity 實現動態網頁。這顯示學生的認知負擔已從「學習 IT 工具」轉移至「利用 IT 工具進行知識展演」。
+| 指標 | 上學期平均 | 下學期平均 | 平均變化 |
+| --- | ---: | ---: | ---: |
+| 媒體豐富度 | 1.75 | 3.50 | +1.75 |
+| 排版架構 | 3.00 | 2.88 | -0.12 |
+| 可見文本字元數 | 1,983 | 3,693 | +1,710 |
+| 專有名詞密度 | 21.75 | 26.24 | +4.50 次／千字 |
+| 批判反思訊號 | 6.54% | 10.73% | +4.19 個百分點 |
 
-#### 2. 文本數據揭示的深度學習
+目前最穩定的描述是：
 
-文本分析結果顯示，下學期作業的「專有名詞密度」顯著提高，且「批判性思考文字佔比」亦呈上升趨勢。這表明學生並非僅是將課本內容複製貼上，而是透過 AI 輔助彙整後，釋放了更多認知空間進行高階反思。
+- 媒體整合明顯增加；
+- 多數高信度配對學生的作品篇幅增加；
+- 多數學生的批判反思訊號增加；
+- 排版大致持平，可能存在尺規天花板；
+- 術語密度呈現個別分化。
 
-#### 3. 激發低成就學生之學習潛能
+完整結果見 [`longitudinal_comparison_2025_2026.md`](longitudinal_comparison_2025_2026.md)。
 
-將數據進行分群分析後發現，原本學期初成績不佳的學生，其「字數」與「媒體豐富度評分」的進步幅度（Gain Score）最為劇烈。訪談與課堂觀察指出，對這群學生而言，傳統紙筆測驗容易帶來挫折，但「產出一個精美的動態網頁」賦予了他們極大的成就感。AI 彌補了他們在文字組織上的弱勢，使他們願意投入更多時間優化排版、增加圖表，無形中大幅提升了對課程內容的參與度與停留時間。
+### 2. 第一次網頁作業的先備經驗差異
 
-### 五、關鍵圖表（建議置入）
+下學期第一次網頁作業中：
 
-- **圖一**：學生網頁作品複雜度（媒體與排版）上下學期評分分佈直方圖。
-- **圖二**：文本分析趨勢圖——上下學期「專有名詞密度」與「批判反思比例」之散佈圖，並以不同顏色標示高／低成就分群，展現低成就組的顯著位移。
-- **建議補充**：挑選 1–2 位進步最多學生的網頁截圖（上學期流水帳 vs. 下學期精美網頁），作為輔助圖表。
+- 有前一學期作品紀錄：14 人
+- 未見前一學期作品紀錄：6 人
 
-### 六、參考文獻
+先備組在可見文本量、專有名詞絕對使用次數與指定主題涵蓋上呈現方向一致的優勢。其中可見文本平均多約 1,743 字元。
 
-（待補：請依投稿格式補上相關文獻）
+然而，小樣本精確檢定未達傳統顯著水準，因此本研究將此結果稱為：
+
+> **先備數位作品經驗與早期內容建構優勢相關的探索性證據。**
+
+完整分析見 [`seismology_2026_hw2_prior_advantage_deep_dive.md`](seismology_2026_hw2_prior_advantage_deep_dive.md)。
+
+### 3. 第一次作業至期末的組間趨同
+
+同時具有第一次網頁作業與期末報告者共 18 人：
+
+- 先備組：13 人
+- 新加入組：5 人
+
+新加入組在學期中的媒體整合與批判反思訊號增幅較大。至期末，兩組在部分作品指標上的差異較早期縮小。
+
+這與下列描述一致：
+
+> Prior digital-artifact experience was associated with an early advantage in content construction, whereas the between-group gap appeared to narrow over the semester as students accumulated shared experience with AI-supported web authoring.
+
+這項結果屬於探索性觀察；第一次作業與期末報告的任務目的不同，不能視為等值前後測，也不能據此推論 AI 造成組間差距縮小。
+
+完整結果見 [`seismology_2026_hw2_to_final_comparison.md`](seismology_2026_hw2_to_final_comparison.md)。
+
+---
+
+## 統計方法
+
+目前使用：
+
+- 描述統計（平均數、中位數）
+- 個別縱向變化
+- 上升／持平／下降方向計數
+- Cliff's delta
+- 精確秩排列檢定
+- Fisher exact test
+
+由於樣本小、非隨機分組，推論統計主要作為效果方向與分布的探索性證據，不作因果解釋。
+
+---
+
+## 投稿前最重要的方法補強
+
+目前最值得優先完成的是 **人工效度與評分者一致性驗證**。
+
+建議由兩位獨立評分者人工評分：
+
+- 媒體豐富度（1–4）
+- 排版架構（1–4）
+- 描述性／批判反思句分類
+
+再報告：
+
+- weighted Cohen's kappa
+- Cohen's kappa
+- automated vs. human agreement
+
+在完成人工驗證以前，論文中應將現有方法稱為 **rule-based operationalization**，並將「批判思考比例」稱為 **heuristic critical-reflection ratio / signal**。
+
+---
+
+## 主要程式
+
+- `analyze_web.py`：學生網頁作品核心分析
+- `analyze_assignment_archive.py`：第一個網頁作業封存資料分析
+- `compare_semesters.py`：跨學期期末作品縱向比較
+- `compare_prior_course_groups.py`：先備作品紀錄組間比較
+- `research_hw2_prior_advantage.py`：第一個作業先備優勢深入分析
+- `build_figures.py`：研究圖表 SVG／PNG 產生器
+- `build_dashboard.py`：GitHub Pages 研究儀表板
+- `check_privacy.py`：公開資料隱私檢查
+
+Python 套件需求見 [`requirements.txt`](requirements.txt)。
+
+---
+
+## 研究圖表與 Dashboard
+
+目前研究圖表涵蓋：
+
+1. 網頁作品複雜度分布
+2. 文本指標跨學期位移
+3. 個別學生縱向變化
+4. 第一次作業至期末變化矩陣
+5. 先備組與新加入組的平均軌跡
+
+ASET 三頁審查短文建議只保留兩張主圖：
+
+- **Figure 1：Longitudinal development of matched students**
+- **Figure 2：Prior-experience advantage and convergence**
+
+完整資料與其他圖表由 `build_dashboard.py` 整合至 `index.html`。
+
+---
+
+## 隱私與去識別化
+
+目前公開版本採用一次性匿名代碼，並移除：
+
+- 學生姓名與學號
+- 個人作品網址
+- 原始文本預覽
+- 原始作業 ZIP
+- 可直接識別學生的作品路徑
+
+詳細說明見 [`PRIVACY.md`](PRIVACY.md)。
+
+注意：較早 Git commit 曾包含直接識別資訊；若研究倫理或個資規範要求從公開 Git 歷史中完整刪除，仍需另行執行 history rewrite 與相關快取／fork 清理。
+
+---
+
+## 目前可以與不能支持的結論
+
+### 可以支持
+
+- 學生數位作品的媒體整合在連續課程中增加。
+- 高信度配對學生中，多數作品的篇幅與批判反思訊號增加。
+- 先備數位作品經驗與下一學期早期內容建構優勢呈方向一致的關聯。
+- 新加入組在部分指標上的學期增幅較大，與組間差距逐步縮小的描述一致。
+
+### 目前不能支持
+
+- AI 直接造成學習成效提升。
+- AI 提升地球科學知識正確性。
+- AI 對「低成就學生」特別有效（目前沒有正式低成就分組變項）。
+- AI 已證實能消除學習落差。
+- 不同作業時間點可直接視為等值前後測。
+
+---
+
+## ASET 2026 投稿文件
+
+- [`ASET_2026_research_framework.md`](ASET_2026_research_framework.md)：正式研究問題、統計框架、結論界線
+- [`ASET_2026_submission_draft.md`](ASET_2026_submission_draft.md)：中文摘要、英文摘要與三頁審查短文草稿
+
+目前論文核心訊息為：
+
+> **This exploratory longitudinal study suggests that prior digital-artifact experience is associated with an early advantage in scientific content construction, while shared experience with AI-supported web authoring is accompanied by increasingly similar digital-artifact profiles across students over the semester.**
