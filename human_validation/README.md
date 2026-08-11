@@ -20,7 +20,7 @@
 - `Seismology_first`：20 份
 - `Seismology_final`：18 份
 
-seed 只含匿名代碼、stage、group、既有自動 Media/Layout 分數與抓取狀態，`source` 欄刻意留白。請勿從舊 Git history 恢復已移除的學生個資或作品網址；應由研究者持有的私人原始名單或作業來源補入。
+seed 只含匿名代碼、stage、group、既有自動 Media/Layout 分數與抓取狀態，`source` 欄刻意留白。學生網址、姓名、學號與重新識別對照資料不得寫回公開 repository。
 
 ## 盲評原則
 
@@ -41,6 +41,8 @@ seed 只含匿名代碼、stage、group、既有自動 Media/Layout 分數與抓
 
 ### Step 1 — 建立私人來源表
 
+#### 方法 A：研究者持有私人原始名單
+
 先複製公開 seed：
 
 ```bash
@@ -48,7 +50,27 @@ cp human_validation/artifact_sources_seed.csv \
    human_validation/private_artifact_sources.csv
 ```
 
-然後只在本機補上 `source` 欄。`private_artifact_sources.csv` 已被 `.gitignore` 排除，不要 commit。
+然後只在本機補上 `source` 欄。
+
+#### 方法 B：授權研究者從本機 Git history 恢復
+
+若你是本研究資料的授權研究者，而且本機 clone 仍保有去識別化前的歷史 commit，可執行：
+
+```bash
+python human_validation/recover_private_sources_from_history.py
+```
+
+此工具會：
+
+1. 從三個既有歷史 CSV snapshot 讀取資料；
+2. 依 stage 檢查筆數；
+3. 逐列核對現行 seed 與歷史資料的 Media / Layout 分數；
+4. 僅將歷史資料的 `來源` 欄填入 `private_artifact_sources.csv`；
+5. **不會把歷史姓名或學號寫入新檔案**。
+
+若筆數或分數不一致，程式會停止，不會猜測配對。
+
+`private_artifact_sources.csv` 已被 `.gitignore` 排除，**不要 git add / commit**。若已有手動整理的 private CSV，程式預設拒絕覆寫；確定要重建時才使用 `--force`。
 
 `auto_status=limited` 的 5 份上學期期末作品仍先保留 `include=1`，因為人工評分若能透過私人原始網址或本機副本正常查看，仍可納入 human validation。若研究者也無法取得完整作品，再將該列 `include` 改為 `0`，並記錄排除原因。
 
@@ -163,3 +185,5 @@ python human_validation/compute_reliability.py \
 ## 資料安全
 
 `human_validation/.gitignore` 已設定忽略 private source、評分者正式填答、對照表、disagreement 與 reliability 結果。請不要把學生原始網址、姓名、學號、逐句私有文本或對照表 commit 到公開 repository。
+
+另外，目前這些來源仍可由舊 Git history 找到，表示「從目前工作樹刪除」並不等於真正從公開歷史移除。完成研究資料備份後，若倫理／隱私要求完整撤除，應另外規劃 Git history rewrite、force push 與 GitHub Pages/cache 清理；這與本 human-validation 流程分開處理。
