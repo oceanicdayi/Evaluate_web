@@ -142,23 +142,18 @@
 
 ---
 
-## 投稿前最重要的方法補強
+## 人工評分穩定性驗證（已完成）
 
-目前最值得優先完成的是 **人工效度與評分者一致性驗證**。
+指導老師對 57 份作品進行兩次盲評（間隔約 30 分鐘），以檢驗媒體豐富度與排版架構尺規的評分穩定性。4 份作品因登入牆或檔案無法存取而排除，最終納入 53 份。
 
-建議由兩位獨立評分者人工評分：
+| 指標 | n | exact agreement | within-one | quadratic weighted κ |
+| --- | ---: | ---: | ---: | ---: |
+| 媒體豐富度 | 53 | 0.774 | 0.962 | 0.750 |
+| 排版架構 | 53 | 0.679 | 1.000 | 0.657 |
 
-- 媒體豐富度（1–4）
-- 排版架構（1–4）
-- 描述性／批判反思句分類
+兩項尺規均達 substantial agreement，支持尺規在同一評分者重複評分下的穩定性。人工共識與自動化評分的比較顯示，媒體 exact=0.264、排版 exact=0.509，反映自動規則式判定與人工判斷之間存在系統性差異。
 
-再報告：
-
-- weighted Cohen's kappa
-- Cohen's kappa
-- automated vs. human agreement
-
-在完成人工驗證以前，論文中應將現有方法稱為 **rule-based operationalization**，並將「批判思考比例」稱為 **heuristic critical-reflection ratio / signal**。
+批判反思訊號目前僅以關鍵詞啟發式估計，尚未經人工內容分析驗證。論文中將現有方法稱為 **rule-based operationalization**，並將批判反思比例稱為 **heuristic critical-reflection signal**。後續研究應納入獨立評分者以建立評分者間信度。
 
 ---
 

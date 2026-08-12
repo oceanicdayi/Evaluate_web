@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+
+# Human validation private files (already covered by human_validation/.gitignore)
+# but listing here too for safety
+human_validation/private_*.csv
+human_validation/private_run/
+
+# Temporary analysis scripts
+human_validation/check_cr.py
+human_validation/verify_step2_3.py
