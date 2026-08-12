@@ -1,0 +1,12 @@
+# Never commit private student/source mappings or completed rating sheets.
+private_*.csv
+private_*.json
+private_run/
+rater_A_*.csv
+rater_B_*.csv
+consensus_*.csv
+*_disagreements.csv
+validation_results*.md
+validation_results*.csv
+artifact_key.csv
+sentence_key.csv

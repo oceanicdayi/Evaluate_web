@@ -1,0 +1,4 @@
+private_id,stage,group,source,automated_media,automated_layout,include
+PRIVATE001,Geophysics_final,prior,https://example.invalid/student-work-1,2,3,1
+PRIVATE002,Seismology_first,new,https://example.invalid/student-work-2,3,3,1
+PRIVATE003,Seismology_final,new,https://example.invalid/student-work-3,4,3,1
