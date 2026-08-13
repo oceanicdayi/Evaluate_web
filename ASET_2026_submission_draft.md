@@ -15,7 +15,7 @@
 
 ## 中文摘要（投稿版草稿）
 
-本研究探討學生在連續地球科學課程中使用生成式 AI 與網頁部署工具後，數位作品如何發展，並分析先備經驗與後續表現的關聯。研究以臺北市立大學地球物理與地震學課程之學生網頁作品為分析單位，以程式量化媒體豐富度、排版架構、可見文本字元數、專有名詞使用及啟發式批判反思訊號。指導老師對 53 份作品兩次盲評，媒體與排版尺規 κ 分別為 0.75 與 0.66，達 substantial agreement。跨學期配對（n=8）顯示，媒體由 1.75 升至 3.50，文本由 1,983 增至 3,693 字元（+86%），反思訊號由 6.54% 升至 10.73%。第一次作業中，先備組（n=14）文本比新加入組（n=6）多 1,743 字、專有名詞多 29 次、主題涵蓋多 1.36/11，方向一致（δ=0.36–0.43）但未達顯著。至期末，組間差距縮小：媒體 δ 由 0.354 降至 0.092，反思 δ 由 0.262 降至 0.015；新加入組增幅較大（媒體+0.60 vs +0.31，反思+6.60pp vs +2.95pp），兩組趨近。結果顯示先備經驗可能與早期內容優勢相關，而共同 AI 輔助網頁製作伴隨作品趨近。因樣本小、非隨機分組且作業性質不同，結果屬探索性。
+本研究探討學生在連續地球科學課程中使用生成式 AI 與網頁部署工具後，數位作品如何發展，並分析先備經驗與後續表現的關聯。研究以臺北市立大學地球物理與地震學課程學生網頁為分析單位，以程式量化媒體豐富度、排版架構、可見文本字元數、專有名詞使用及啟發式批判反思訊號。指導老師對 53 份作品兩次盲評，媒體與排版尺規 κ 為 0.75 與 0.66，達 substantial agreement。程式分析跨學期配對（n=8）顯示媒體由 1.75 升至 3.50，文本由 1,983 增至 3,693 字元（+86%），反思訊號由 6.54% 升至 10.73%。人工評分（n=11）亦顯示媒體由 2.45 升至 3.45、排版由 2.64 升至 3.09。第一次作業先備組文本比新加入組多 1,743 字、專有名詞多 29 次（δ=0.36–0.43）但未達顯著，人工評分先備組媒體亦較高（2.21 vs 1.80）。至期末，程式分析組間差距縮小（δ 0.354→0.092），但人工評分先備組媒體仍較高（3.38 vs 2.20）。結果顯示先備經驗與早期內容優勢相關，共同 AI 輔助製作伴隨部分指標趨近，惟自動化與人工在收斂趨勢上有差異。因樣本小、非隨機且作業不同，屬探索性。
 
 **關鍵詞：** 生成式 AI、地球科學教育、數位作品、縱向研究、數位敘事
 
@@ -25,9 +25,9 @@
 
 This exploratory longitudinal study examined how students' digital artifacts developed across consecutive Earth science courses using generative AI and web-deployment tools, and whether prior digital-artifact experience was associated with later performance. Student web projects from Geophysics and Seismology courses at the University of Taipei were analyzed using a rule-based framework quantifying media richness, layout structure, visible-text character count, technical-term use, and a heuristic critical-reflection signal. The instructor blind-scored 53 artifacts twice (≈30-min interval); quadratic weighted κ was 0.75 for media and 0.66 for layout (substantial agreement).
 
-Among eight matched students, media richness rose from 1.75 to 3.50, visible text from 1,983 to 3,693 characters (+86%), and reflection signal from 6.54% to 10.73% (6/8 increased). In the first assignment, prior-experience students (n=14) produced 1,743 more characters, 29 more technical terms, and covered 1.36 more topics than newly-joined students (n=6); indicators were directionally consistent (Cliff's δ=0.36–0.43) but non-significant (p>0.05). By the final report, gaps narrowed: media δ decreased from 0.354 to 0.092, reflection δ from 0.262 to 0.015. Newly-joined students showed larger gains in media (+0.60 vs +0.31) and reflection (+6.60pp vs +2.95pp), converging toward the prior group.
+Automated analysis of eight matched students showed media richness rising from 1.75 to 3.50, visible text from 1,983 to 3,693 (+86%), and reflection signal from 6.54% to 10.73%. Human scoring of 11 cross-semester students confirmed media growth (2.45→3.45) and layout improvement (2.64→3.09). In the first assignment, prior-experience students (n=14) produced 1,743 more characters and 29 more technical terms (δ=0.36–0.43, non-significant); human scoring also showed higher media for the prior group (2.21 vs 1.80). By the final report, automated analysis showed gap narrowing (media δ 0.354→0.092), yet human scoring still showed a substantial media gap (3.38 vs 2.20), suggesting automated and human assessments diverge on convergence trends.
 
-Prior digital-artifact experience may be associated with early content-construction advantage, while shared AI-supported authoring is accompanied by increasingly similar artifact profiles. Given small non-randomized samples and differing tasks, results are exploratory.
+Prior digital-artifact experience may be associated with early content-construction advantage, while shared AI-supported authoring is accompanied by partial convergence. Given small non-randomized samples, differing tasks, and automated-human divergence, results are exploratory.
 
 **Keywords:** generative AI; Earth science education; digital artifacts; longitudinal analysis; digital storytelling
 
@@ -124,6 +124,16 @@ Prior digital-artifact experience may be associated with early content-construct
 
 ---
 
+### 4. 人工評分結果：程式分析與人工評分的交叉比較
+
+指導老師兩次盲評的共識分數提供了與程式自動評分交叉比對的機會。在跨學期層面，11 位上下學期均有期末作品的學生，人工評分媒體由 2.45 升至 3.45（+1.00），排版由 2.64 升至 3.09（+0.45），與程式分析「媒體明顯提升」的方向一致，但人工評分亦觀察到排版提升，而程式分析因尺規天花板呈現持平。
+
+在第一次作業的組間比較中，人工評分先備組媒體（2.21）高於新加入組（1.80），差距 +0.41，與程式分析方向一致。至期末，人工評分先備組媒體（3.38）仍明顯高於新加入組（2.20），差距 +1.18，與程式分析顯示的組間收斂（δ 由 0.354 降至 0.092）趨勢不一致。此差異可能源自程式以 HTML 標籤判定，而人工以頁面實際呈現為準：部分新加入組學生使用 React/SPA 框架，程式因靜態 HTML 稀疏而給高分，但人工評分認為實際互動深度有限。
+
+此交叉比對顯示，自動化與人工評分在「個別成長方向」上大致一致，但在「組間收斂趨勢」上存在分歧，呼應前述自動化與人工一致率偏低（媒體 exact=0.26）的發現。
+
+---
+
 ## 三之五、AI 融入地球科學與 STEM 之教學實踐
 
 本研究場域為連續兩學期的地科專業課程（上學期「地球物理學」、下學期「地震學」）。為跳脫傳統紙筆測驗的框架，課程導入了跨領域的 STEM 教學設計，並將生成式 AI 定位為學生的「學習鷹架」與「實作協作者」，讓學生透過建置「數位專題網頁」來展演所學。
@@ -143,7 +153,7 @@ Prior digital-artifact experience may be associated with early content-construct
 
 本研究顯示，連續使用生成式 AI 與網頁部署工具的地球科學課程中，學生數位作品最一致的變化出現在媒體整合與內容產出。另一方面，已有前一學期數位作品紀錄的學生在下一學期早期呈現較完整的內容建構特徵，說明「如何使用 AI 與網頁工具表達科學內容」本身可能是一種可累積的數位經驗（Mishra & Koehler, 2006）。
 
-值得注意的是，新加入組在一學期中的媒體整合與批判反思訊號增幅較大，使兩組到期末時呈現更接近的作品型態。這項結果不應被解讀為 AI 已證實能消除學習落差，但它提出一個值得後續驗證的教育假設：當所有學生持續在相同的 AI-supported authoring environment 中製作、修正與發布作品時，缺乏先備數位經驗的學生可能逐步建立與有經驗者相近的數位表達能力（Wang et al., 2024）。
+值得注意的是，程式分析顯示新加入組在媒體整合與反思訊號增幅較大，組間差距至期末縮小。然而人工評分結果呈現不同圖像：先備組期末媒體（3.38）仍明顯高於新加入組（2.20），差距並未收斂。此分歧可能反映自動化尺規對 React/SPA 框架的過度評價，亦提示「組間趨同」此一結論需以更嚴謹的評量方式驗證。這項結果不應被解讀為 AI 已證實能消除學習落差，但它提出一個值得後續驗證的教育假設：當所有學生持續在相同的 AI-supported authoring environment 中製作、修正與發布作品時，缺乏先備數位經驗的學生可能逐步建立與有經驗者相近的數位表達能力（Wang et al., 2024）。
 
 本研究有四項主要限制。第一，樣本數小且非隨機分組。第二，「前一學期作品紀錄」只是先備經驗代理變項。第三，不同時間點的作業目的與篇幅要求不同，不能視為標準化前後測。第四，數位作品尺規與批判反思訊號主要由規則式方法操作化。指導老師兩次評分的穩定性驗證顯示，媒體與排版尺規達 substantial agreement（quadratic weighted κ 分別為 0.75 與 0.66），但自動化評分與人工共識的一致率偏低（媒體 exact=0.26），反映自動規則式判定與人工判斷之間存在系統性差異。此外，批判反思訊號目前僅以關鍵詞啟發式估計，尚未經人工內容分析驗證，應視為 heuristic critical-reflection signal 而非經驗證的量表。後續研究應納入獨立評分者以建立評分者間信度，並修訂編碼手冊以驗證批判反思訊號。
 
