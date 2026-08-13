@@ -15,7 +15,7 @@
 
 ## 中文摘要（投稿版草稿）
 
-本研究探討學生在連續地球科學課程中使用生成式 AI 與網頁部署工具後，數位作品如何發展，並分析先備經驗與後續表現的關聯。研究以臺北市立大學地球物理與地震學課程學生網頁為分析單位，以程式量化媒體豐富度、排版架構、可見文本字元數、專有名詞使用及啟發式批判反思訊號。指導老師對 53 份作品兩次盲評，媒體與排版尺規 κ 為 0.75 與 0.66，達 substantial agreement。程式分析跨學期配對（n=8）顯示媒體由 1.75 升至 3.50，文本由 1,983 增至 3,693 字元（+86%），反思訊號由 6.54% 升至 10.73%。人工評分（n=11）亦顯示媒體由 2.45 升至 3.45、排版由 2.64 升至 3.09。第一次作業先備組文本比新加入組多 1,743 字、專有名詞多 29 次（δ=0.36–0.43）但未達顯著，人工評分先備組媒體亦較高（2.21 vs 1.80）。至期末，程式分析組間差距縮小（δ 0.354→0.092），但人工評分先備組媒體仍較高（3.38 vs 2.20）。結果顯示先備經驗與早期內容優勢相關，共同 AI 輔助製作伴隨部分指標趨近，惟自動化與人工在收斂趨勢上有差異。因樣本小、非隨機且作業不同，屬探索性。
+本研究以臺北市立大學連續兩學期之「地球物理」與「地震學」課程為場域，探討學生在 AI 輔助網頁製作環境中數位作品的縱向發展，並分析先備數位經驗與後續表現的關聯。研究建立規則式數位作品分析流程，以程式量化媒體豐富度、排版架構、可見文本量、學科專有名詞使用及啟發式批判反思訊號；同時由指導老師對 53 份作品進行兩次盲評，檢驗尺規的評分穩定性（quadratic weighted κ 達 0.75 與 0.66，substantial agreement）。程式分析與人工評分均顯示，學生跨學期作品的媒體整合呈現一致性成長。在下學期第一次作業中，具先備數位經驗的學生於內容量、學科語言使用與主題涵蓋上呈現方向一致的早期優勢，兩種評分方式皆支持此趨勢，惟小樣本精確檢定未達統計顯著。至期末報告，程式分析顯示組間差距趨於縮小，但人工評分結果顯示先備組在媒體整合上仍保有優勢，反映自動化尺規與人工判斷在組間收斂趨勢上存在差異。整體而言，先備數位經驗可能與早期內容建構優勢相關，而共同的 AI 輔助網頁製作經驗伴隨部分指標的組間趨近；惟因樣本小、非隨機分組且作業性質不同，結果屬探索性證據。
 
 **關鍵詞：** 生成式 AI、地球科學教育、數位作品、縱向研究、數位敘事
 
@@ -25,7 +25,7 @@
 
 This exploratory longitudinal study examined how students' digital artifacts developed across consecutive Earth science courses using generative AI and web-deployment tools, and whether prior digital-artifact experience was associated with later performance. Student web projects from Geophysics and Seismology courses at the University of Taipei were analyzed using a rule-based framework quantifying media richness, layout structure, visible-text character count, technical-term use, and a heuristic critical-reflection signal. The instructor blind-scored 53 artifacts twice (≈30-min interval); quadratic weighted κ was 0.75 for media and 0.66 for layout (substantial agreement).
 
-Automated analysis of eight matched students showed media richness rising from 1.75 to 3.50, visible text from 1,983 to 3,693 (+86%), and reflection signal from 6.54% to 10.73%. Human scoring of 11 cross-semester students confirmed media growth (2.45→3.45) and layout improvement (2.64→3.09). In the first assignment, prior-experience students (n=14) produced 1,743 more characters and 29 more technical terms (δ=0.36–0.43, non-significant); human scoring also showed higher media for the prior group (2.21 vs 1.80). By the final report, automated analysis showed gap narrowing (media δ 0.354→0.092), yet human scoring still showed a substantial media gap (3.38 vs 2.20), suggesting automated and human assessments diverge on convergence trends.
+Both automated and human scoring indicated consistent growth in media integration across semesters. In the first web assignment, students with prior digital-artifact experience showed a directionally consistent early advantage in content volume, technical-term use, and topic coverage; both scoring methods supported this trend, though exact small-sample tests did not reach significance. By the final report, automated analysis suggested between-group convergence, yet human scoring indicated the prior-experience group retained a media advantage, revealing a divergence between automated and human assessments on convergence trends.
 
 Prior digital-artifact experience may be associated with early content-construction advantage, while shared AI-supported authoring is accompanied by partial convergence. Given small non-randomized samples, differing tasks, and automated-human divergence, results are exploratory.
 
