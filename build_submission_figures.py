@@ -64,8 +64,8 @@ def load_longitudinal() -> pd.DataFrame:
 def load_hw2_final() -> pd.DataFrame:
     hw2 = pd.read_csv(ROOT / "seismology_2026_hw2_prior_advantage_evidence.csv")
     final = pd.read_csv(ROOT / "results_seismology_2026_final_primary.csv")
-    common = hw2[["匿名代碼", "組別", "媒體豐富度(1-4)", "批判思考佔比(%)"]].merge(
-        final[["匿名代碼", "媒體豐富度(1-4)", "批判思考佔比(%)"]],
+    common = hw2[["匿名代碼", "組別", "媒體豐富度(1-4)", "排版架構(1-4)", "批判思考佔比(%)"]].merge(
+        final[["匿名代碼", "媒體豐富度(1-4)", "排版架構(1-4)", "批判思考佔比(%)"]],
         on="匿名代碼", suffixes=("_hw2", "_final"), validate="one_to_one"
     )
     return common
@@ -192,7 +192,8 @@ def figure1(data: pd.DataFrame) -> None:
 
 
 def figure2(common: pd.DataFrame) -> None:
-    """Group mean trajectories: HW2 to Final for prior vs new groups."""
+    """Group mean trajectories: HW2 to Final for prior vs new groups.
+    Uses media richness and layout structure (matching figure5 first two panels)."""
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6), facecolor=PAPER)
     fig.subplots_adjust(left=0.08, right=0.96, top=0.88, bottom=0.12, wspace=0.28)
 
@@ -237,49 +238,39 @@ def figure2(common: pd.DataFrame) -> None:
     ax1.spines["top"].set_visible(False)
     ax1.spines["right"].set_visible(False)
 
-    # Panel B: Critical-reflection signal
+    # Panel B: Layout structure
     ax2.set_facecolor("#ffffff")
-    prior_cr = [prior["批判思考佔比(%)_hw2"].mean(),
-                prior["批判思考佔比(%)_final"].mean()]
-    new_cr = [new["批判思考佔比(%)_hw2"].mean(),
-              new["批判思考佔比(%)_final"].mean()]
+    prior_layout = [prior["排版架構(1-4)_hw2"].mean(),
+                    prior["排版架構(1-4)_final"].mean()]
+    new_layout = [new["排版架構(1-4)_hw2"].mean(),
+                  new["排版架構(1-4)_final"].mean()]
 
-    ax2.plot(x, prior_cr, color=PRIOR_COLOR, linewidth=3, marker="o",
+    ax2.plot(x, prior_layout, color=PRIOR_COLOR, linewidth=3, marker="o",
              markersize=10, markerfacecolor=PRIOR_COLOR,
              markeredgecolor="white", markeredgewidth=2, zorder=5)
-    ax2.plot(x, new_cr, color=NEW_COLOR, linewidth=3, marker="o",
+    ax2.plot(x, new_layout, color=NEW_COLOR, linewidth=3, marker="o",
              markersize=10, markerfacecolor=NEW_COLOR,
              markeredgecolor="white", markeredgewidth=2, zorder=5)
 
     # Annotate values
-    for i, val in enumerate(prior_cr):
-        ax2.annotate(f"{val:.2f}%", (i, val), textcoords="offset points",
+    for i, val in enumerate(prior_layout):
+        ax2.annotate(f"{val:.2f}", (i, val), textcoords="offset points",
                      xytext=(0, -18 if i == 0 else 12), fontsize=11,
                      color=PRIOR_COLOR, fontweight="bold", ha="center")
-    for i, val in enumerate(new_cr):
-        ax2.annotate(f"{val:.2f}%", (i, val), textcoords="offset points",
+    for i, val in enumerate(new_layout):
+        ax2.annotate(f"{val:.2f}", (i, val), textcoords="offset points",
                      xytext=(0, 12 if i == 0 else -18), fontsize=11,
                      color=NEW_COLOR, fontweight="bold", ha="center")
 
-    # Arrow annotations for gains
-    ax2.annotate(f"+{new_cr[1]-new_cr[0]:.2f}pp",
-                 xy=(0.5, (new_cr[0]+new_cr[1])/2),
-                 textcoords="offset points", xytext=(35, 0),
-                 fontsize=10, color=NEW_COLOR, fontweight="bold", style="italic")
-    ax2.annotate(f"+{prior_cr[1]-prior_cr[0]:.2f}pp",
-                 xy=(0.5, (prior_cr[0]+prior_cr[1])/2),
-                 textcoords="offset points", xytext=(35, 0),
-                 fontsize=10, color=PRIOR_COLOR, fontweight="bold", style="italic")
-
     ax2.set_xlim(-0.3, 1.3)
-    y_min_cr = min(min(prior_cr), min(new_cr)) - 2
-    y_max_cr = max(max(prior_cr), max(new_cr)) + 3
-    ax2.set_ylim(y_min_cr, y_max_cr)
+    y_min_l = min(min(prior_layout), min(new_layout)) - 0.3
+    y_max_l = max(max(prior_layout), max(new_layout)) + 0.3
+    ax2.set_ylim(y_min_l, y_max_l)
     ax2.set_xticks(x)
     ax2.set_xticklabels(["First Web\nAssignment", "Final Report"], fontsize=11)
-    ax2.set_ylabel("Critical-Reflection Signal (%)", fontsize=12,
+    ax2.set_ylabel("Layout Structure (1–4)", fontsize=12,
                    fontweight="bold", color=INK)
-    ax2.set_title("(B) Critical-Reflection Signal", fontsize=14,
+    ax2.set_title("(B) Layout Structure", fontsize=14,
                   fontweight="bold", color=INK, loc="left")
     ax2.grid(axis="y", color=GRID, linewidth=0.8, alpha=0.7)
     ax2.spines["top"].set_visible(False)

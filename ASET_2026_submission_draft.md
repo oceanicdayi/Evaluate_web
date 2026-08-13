@@ -6,6 +6,11 @@
 
 **Longitudinal Development of AI-Supported Digital Artifacts in Earth Science Education: Prior Experience, Early Advantage, and Convergence**
 
+陳達毅¹²
+
+¹中央氣象署地震測報中心
+²臺北市立大學地球環境暨生物資源學系
+
 ---
 
 ## 中文摘要（投稿版草稿）
@@ -101,7 +106,7 @@ The findings suggest that prior digital-artifact experience may be associated wi
 
 可見文本字元數由平均 **1,983** 增至 **3,693**，平均增加 1,710 字元；8 人中有 7 人增加。批判反思訊號由 6.54% 增至 10.73%，6 人增加、2 人下降。專有名詞密度則有 4 人增加、4 人下降，顯示篇幅增加並不必然伴隨更高的術語集中度。
 
-**[Figure 1 建議：高信度配對學生之媒體豐富度與批判反思訊號跨學期個別軌跡]**
+**[Figure 1：高信度配對學生之媒體豐富度與排版架構上、下學期評分分布（figure1_web_complexity_distribution）]**
 
 ### 2. 先備數位作品經驗的早期優勢
 
@@ -115,7 +120,22 @@ The findings suggest that prior digital-artifact experience may be associated wi
 
 至期末，兩組在媒體與反思訊號上的差異較早期縮小。這與「先備經驗帶來的早期差距，在共同的 AI 輔助網頁製作經驗累積後逐步縮小」的描述一致，但由於第一次作業與期末報告目的不同，不能將其視為等值前後測。
 
-**[Figure 2 建議：先備組與新加入組由第一次網頁作業至期末的媒體豐富度與批判反思訊號平均軌跡]**
+**[Figure 2：先備組與新加入組由第一次網頁作業至期末的媒體豐富度與排版架構平均軌跡（figure2_prior_advantage_convergence）]**
+
+---
+
+## 三之五、AI 融入地球科學與 STEM 之教學實踐
+
+本研究場域為連續兩學期的地科專業課程（上學期「地球物理學」、下學期「地震學」）。為跳脫傳統紙筆測驗的框架，課程導入了跨領域的 STEM 教學設計，並將生成式 AI 定位為學生的「學習鷹架」與「實作協作者」，讓學生透過建置「數位專題網頁」來展演所學。
+
+**1. 跨領域 STEM 與 AI 協作的深度整合**
+課程以核心地科理論（Science，如板塊構造、彈性波與地震層析成像）及數學公式推演（Mathematics，如走時公式與誤差分析）為學理基礎，並大幅強化科技與工程實作（Technology & Engineering）。學生不僅需親自赴戶外架設震測儀器、從零組裝並編程 Raspberry Pi 物聯網地震儀，更需頻繁使用 ChatGPT 與 Gemini 等 AI 工具作為「程式除錯助教」。例如，學生利用 AI 生成 Gradio 互動介面來視覺化走時曲線，或與 AI 討論加速度圖表以修正感測器的判讀邏輯。這使 AI 成為串聯科學理論與工程實踐的關鍵橋樑。
+
+**2. 歷程導向的數位專題與學習反思**
+兩學期的課程皆以個人化的「數位學習歷程網頁」取代期末考，並運用 GitHub Pages 與 Hugging Face 進行雲端部署。上學期聚焦於 AI 工具建置、走時層析探勘實作與 AI Agent 工作流設計；下學期則進階至 SmartSolo 震測資料處理、國震中心參訪反思與 IoT 地震儀實作發表。學生不再只是被動吸收知識，而是化身為數位內容的創造者，將每週的學習軌跡轉化為公開的數位作品。
+
+**3. 學生迴響與成效**
+將學習成果轉化為具體的網頁作品，為學生帶來了成就感與參與動機。如同前述量化分析所示，學生在認知與技術操作上跨越門檻，其產出的「媒體豐富度」與「可見字數」均有成長。此外，在 AI 工具的輔助下，學生有更多心力投入在實驗檢討與知識重組上，期末作品中的批判思考與反思訊號比例有所提升，此教學模式在知識內化與素養深化的效果值得後續進一步驗證。
 
 ---
 
@@ -133,8 +153,8 @@ The findings suggest that prior digital-artifact experience may be associated wi
 
 ## 建議圖表
 
-1. **Figure 1. Longitudinal development of matched students** — 高信度配對學生之媒體豐富度與批判反思訊號個別軌跡。
-2. **Figure 2. Prior-experience advantage and convergence** — 先備組與新加入組由第一次網頁作業至期末的兩項平均軌跡。
+1. **Figure 1. Web complexity distribution of matched students** — 8 位高信度配對學生上、下學期媒體豐富度與排版架構評分分布（`figure1_web_complexity_distribution.png`）。
+2. **Figure 2. Prior-experience advantage and convergence** — 先備組與新加入組由第一次網頁作業至期末的媒體豐富度與排版架構平均軌跡（`figure2_prior_advantage_convergence.png`）。
 
 其餘完整圖表與資料可保留於 GitHub Pages 研究儀表板作補充展示。
 
